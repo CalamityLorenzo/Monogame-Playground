@@ -34,7 +34,7 @@ namespace MonoGameTests
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            this.rTater = new Rotator(0, 36);
+            this.rTater = new Rotator(0, 52);
             base.Initialize();
         }
 
