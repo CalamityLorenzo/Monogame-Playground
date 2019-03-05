@@ -1,6 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GameLibrary.Extensions;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGameTests.AppObjects;
+using System;
 
 namespace MonoGameTests
 {
@@ -11,6 +14,10 @@ namespace MonoGameTests
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        SpriteFont arial;
+        Rotator rTater;
+
+        public KeyboardState previousKeyState { get; private set; }
 
         public Game1()
         {
@@ -27,7 +34,7 @@ namespace MonoGameTests
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            this.rTater = new Rotator(0, 18);
             base.Initialize();
         }
 
@@ -41,6 +48,8 @@ namespace MonoGameTests
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            arial = this.Content.Load<SpriteFont>("Arial");
+
         }
 
         /// <summary>
@@ -52,6 +61,44 @@ namespace MonoGameTests
             // TODO: Unload any non ContentManager content here
         }
 
+        private void UpdateTheLine(KeyboardState kState)
+        {
+
+            Action<Keys, float> keyPressed = (key, angle) =>
+            {
+                //if (kState.IsKeyDown(key) && !previousKeyState.IsKeyDown(key))
+                //{
+                //    this.rTater.SetDestinationAngle(angle);
+                //}
+
+                //if(kState.IsKeyUp(key) && !previousKeyState.IsKeyUp(key))
+                //{
+                //    this.rTater.StopRotation();
+                //}
+
+            };
+
+
+
+            if (kState.IsKeyDown(Keys.D) && !previousKeyState.IsKeyDown(Keys.D))
+            {
+                this.rTater.SetDestinationAngle(90f);
+            }
+
+            if (kState.IsKeyUp(Keys.D) && !previousKeyState.IsKeyUp(Keys.D))
+            {
+                this.rTater.StopRotation();
+            }
+
+            keyPressed(Keys.D, 90f);
+            keyPressed(Keys.W, 0f);
+            keyPressed(Keys.S, 180f);
+            keyPressed(Keys.A, 270f);
+
+
+            this.previousKeyState = kState;
+        }
+
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -59,11 +106,14 @@ namespace MonoGameTests
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            var kState = Keyboard.GetState();
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || kState.IsKeyDown(Keys.Escape))
                 Exit();
 
+            var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            UpdateTheLine(kState);
             // TODO: Add your update logic here
-
+            this.rTater.Update(deltaTime);
             base.Update(gameTime);
         }
 
@@ -73,9 +123,14 @@ namespace MonoGameTests
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
+            this.spriteBatch.Begin();
+            this.spriteBatch.DrawString(this.arial, this.rTater.CurrentAngle.ToString(), new Vector2(50, 50), Color.DarkGreen); 
+            this.spriteBatch.DrawLine(new Vector2(400, 400), 100, this.rTater.CurrentAngle, Color.White);
+            this.spriteBatch.End();
+
 
             base.Draw(gameTime);
         }
