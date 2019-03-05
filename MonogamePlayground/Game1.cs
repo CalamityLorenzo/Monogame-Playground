@@ -34,7 +34,7 @@ namespace MonoGameTests
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            this.rTater = new Rotator(0, 18);
+            this.rTater = new Rotator(0, 36);
             base.Initialize();
         }
 
@@ -66,29 +66,17 @@ namespace MonoGameTests
 
             Action<Keys, float> keyPressed = (key, angle) =>
             {
-                //if (kState.IsKeyDown(key) && !previousKeyState.IsKeyDown(key))
-                //{
-                //    this.rTater.SetDestinationAngle(angle);
-                //}
+                if (kState.IsKeyDown(key) && !previousKeyState.IsKeyDown(key))
+                {
+                    this.rTater.SetDestinationAngle(angle);
+                }
 
-                //if(kState.IsKeyUp(key) && !previousKeyState.IsKeyUp(key))
-                //{
-                //    this.rTater.StopRotation();
-                //}
+                if (kState.IsKeyUp(key) && !previousKeyState.IsKeyUp(key))
+                {
+                    this.rTater.StopRotation();
+                }
 
             };
-
-
-
-            if (kState.IsKeyDown(Keys.D) && !previousKeyState.IsKeyDown(Keys.D))
-            {
-                this.rTater.SetDestinationAngle(90f);
-            }
-
-            if (kState.IsKeyUp(Keys.D) && !previousKeyState.IsKeyUp(Keys.D))
-            {
-                this.rTater.StopRotation();
-            }
 
             keyPressed(Keys.D, 90f);
             keyPressed(Keys.W, 0f);

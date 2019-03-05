@@ -1,6 +1,7 @@
 ﻿using MonoGameTests.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,7 +48,6 @@ namespace MonoGameTests.AppObjects
                 else
                 {
                     this.State = RotatorState.Increase;
-
                 }
             }
             else
