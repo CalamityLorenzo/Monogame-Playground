@@ -72,6 +72,7 @@ namespace MonoGameTests.AppObjects
         {
             this.State = RotatorState.Stopped;
         }
+
         public void Update(float delta)
         {
             // delta time since last update
