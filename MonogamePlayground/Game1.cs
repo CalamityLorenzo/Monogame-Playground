@@ -1,9 +1,11 @@
-﻿using GameLibrary.Extensions;
+﻿using GameLibrary.Animation;
+using GameLibrary.AppObjects;
+using GameLibrary.Extensions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGameTests.AppObjects;
 using System;
+using Texture2D = Microsoft.Xna.Framework.Graphics.Texture2D;
 
 namespace MonoGameTests
 {
@@ -16,7 +18,7 @@ namespace MonoGameTests
         SpriteBatch spriteBatch;
         SpriteFont arial;
         Rotator rTater;
-
+        Microsoft.Xna.Framework.Graphics.Texture2D baseJeep;
         public KeyboardState previousKeyState { get; private set; }
 
         public Game1()
@@ -25,12 +27,7 @@ namespace MonoGameTests
             Content.RootDirectory = "Content";
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
+
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
@@ -38,10 +35,6 @@ namespace MonoGameTests
             base.Initialize();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
@@ -50,12 +43,10 @@ namespace MonoGameTests
             // TODO: use this.Content to load your game content here
             arial = this.Content.Load<SpriteFont>("Arial");
 
+            baseJeep = Texture2d.FromFileName(this.GraphicsDevice, "Content/Jeep.png");
+            var jeepFrames = FramesGenerator.GenerateFrames( new FrameInfo(243, 324), new Point(baseJeep.Width, baseJeep.Height));
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// game-specific content.
-        /// </summary>
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
@@ -115,7 +106,7 @@ namespace MonoGameTests
 
             // TODO: Add your drawing code here
             this.spriteBatch.Begin();
-            this.spriteBatch.DrawString(this.arial, this.rTater.CurrentAngle.ToString(), new Vector2(50, 50), Color.DarkGreen); 
+            this.spriteBatch.DrawString(this.arial, this.rTater.CurrentAngle.ToString(), new Vector2(50, 50), Color.DarkGreen);
             this.spriteBatch.DrawLine(new Vector2(400, 400), 100, this.rTater.CurrentAngle, Color.White);
             this.spriteBatch.End();
 

@@ -11,14 +11,14 @@ namespace GameLibrary.Extensions
 {
     public static class SpriteBatchExtensions
     {
-        private static Lazy<Texture2D> OnePixel;
+        private static Lazy<Microsoft.Xna.Framework.Graphics.Texture2D> OnePixel;
 
         private static Texture2D GetOnePixelTexture(GraphicsDevice device)
         {
             if (OnePixel == null)
             {
                 var textureData = new Color[] { Color.White };
-                OnePixel = new Lazy<Texture2D>(() => new Texture2D(device, 1, 1));
+                OnePixel = new Lazy<Microsoft.Xna.Framework.Graphics.Texture2D>(() => new Microsoft.Xna.Framework.Graphics.Texture2D(device, 1, 1));
                 OnePixel.Value.SetData<Color>(textureData);
             }
             return OnePixel.Value;
