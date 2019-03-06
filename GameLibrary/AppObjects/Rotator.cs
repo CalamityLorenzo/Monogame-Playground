@@ -1,4 +1,4 @@
-﻿using MonoGameTests.Interfaces;
+﻿using GameLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonoGameTests.AppObjects
+namespace GameLibrary.AppObjects
 {
 
     public enum RotatorState
@@ -17,7 +17,7 @@ namespace MonoGameTests.AppObjects
         Stopped
     }
 
-    class Rotator : Updatable
+    public class Rotator : IGameObjectUpdate
     {
 
         public float CurrentAngle { get; private set; }
@@ -32,8 +32,6 @@ namespace MonoGameTests.AppObjects
             AnglesPerSecond = anglesPerSecond;
             this.State = RotatorState.Unknown;
         }
-
-
 
         public void SetDestinationAngle(float angleToSet)
         {

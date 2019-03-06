@@ -42,7 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppObjects\Rotator.cs" />
     <Compile Include="Bresenham.cs" />
+    <Compile Include="Interfaces\GameDrawing.cs" />
+    <Compile Include="Interfaces\GameUpdateable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpriteBatchExtensions.cs" />
   </ItemGroup>
