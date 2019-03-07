@@ -9,8 +9,8 @@
     <ProjectGuid>{2119E0F4-4846-4C0E-A3F1-4232F2A4B835}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MonoGameTests</RootNamespace>
-    <AssemblyName>MonoGameTests</AssemblyName>
+    <RootNamespace>MonogamePlayground</RootNamespace>
+    <AssemblyName>MonogamePlayground</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>

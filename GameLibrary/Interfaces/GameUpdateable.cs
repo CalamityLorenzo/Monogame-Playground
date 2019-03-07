@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonoGameTests.Interfaces
+namespace GameLibrary.Interfaces
 {
-    interface Updatable
+    // unlike monogame object we only pass the detla times
+    // not the full time.
+    public interface IGameObjectUpdate
     {
         void Update(float mlSinceupdate);
     }
