@@ -40,12 +40,61 @@ namespace GameLibrary.Animation
         }
 
         public Rectangle[] DisplayFrames { get; }
-        public JeepState CurrentState { get; private set}
+        public JeepState CurrentState { get; private set; }
         private JeepState PreviousState { get; set; }
         public void Update(float mlSinceupdate)
         {
             // If we had animation then things woulf be occuring here.
+            if (PreviousState != CurrentState)
+            {
+                UpdateCurrentFrame(CurrentState);
+            }
+        }
 
+        private void UpdateCurrentFrame(JeepState characterState)
+        {
+            switch (characterState)
+            {
+                case JeepState.North:
+                    this.CurrentDisplayFrame = this.DisplayFrames[0];
+                    break;
+                case JeepState.NorthNorthEast:
+                    this.CurrentDisplayFrame = this.DisplayFrames[1];
+                    break;
+                case JeepState.NorthEast:
+                    this.CurrentDisplayFrame = this.DisplayFrames[2];
+                    break;
+                case JeepState.East:
+                    this.CurrentDisplayFrame = this.DisplayFrames[3];
+                    break;
+                case JeepState.South:
+                    this.CurrentDisplayFrame = this.DisplayFrames[6];
+
+                    break;
+                case JeepState.SouthSouthEast:
+                    this.CurrentDisplayFrame = this.DisplayFrames[5];
+
+                    break;
+                case JeepState.SouthEast:
+                    this.CurrentDisplayFrame = this.DisplayFrames[4];
+
+                    break;
+                case JeepState.SouthSouthWest:
+                    this.CurrentDisplayFrame = this.DisplayFrames[7];
+                    break;
+                case JeepState.SouthWest:
+                    this.CurrentDisplayFrame = this.DisplayFrames[8];
+                    break;
+                case JeepState.West:
+                    this.CurrentDisplayFrame = this.DisplayFrames[9];
+                    break;
+                case JeepState.NorthNorthWest:
+                    this.CurrentDisplayFrame = this.DisplayFrames[11];
+                    break;
+                case JeepState.NorthWest:
+                    this.CurrentDisplayFrame = this.DisplayFrames[10];
+                    break;
+            }
         }
 
         public void SetState(JeepState newState)

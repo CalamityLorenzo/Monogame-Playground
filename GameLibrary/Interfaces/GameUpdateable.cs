@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +13,10 @@ namespace GameLibrary.Interfaces
     public interface IGameObjectUpdate
     {
         void Update(float mlSinceupdate);
+    }
+
+    public interface IGameContainerUpdate
+    {
+        void Update(GameTime time, KeyboardState keystate, GamePadState padState);
     }
 }

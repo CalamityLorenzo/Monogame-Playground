@@ -1,6 +1,7 @@
 ﻿using GameLibrary.Animation;
 using GameLibrary.AppObjects;
 using GameLibrary.Extensions;
+using GameLibrary.Player;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -18,6 +19,7 @@ namespace MonoGameTests
         SpriteBatch spriteBatch;
         SpriteFont arial;
         Rotator rTater;
+        PlayerContainer player;
         Microsoft.Xna.Framework.Graphics.Texture2D baseJeep;
         public KeyboardState previousKeyState { get; private set; }
 
@@ -31,7 +33,7 @@ namespace MonoGameTests
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            this.rTater = new Rotator(0, 52);
+            this.rTater = new Rotator(0, 180);
             base.Initialize();
         }
 
@@ -44,7 +46,8 @@ namespace MonoGameTests
             arial = this.Content.Load<SpriteFont>("Arial");
 
             baseJeep = Texture2d.FromFileName(this.GraphicsDevice, "Content/Jeep.png");
-            var jeepFrames = FramesGenerator.GenerateFrames( new FrameInfo(243, 324), new Point(baseJeep.Width, baseJeep.Height));
+            var jeepFrames = FramesGenerator.GenerateFrames( new FrameInfo(243, 243), new Point(baseJeep.Width, baseJeep.Height));
+            player = new PlayerContainer(this.spriteBatch, this.baseJeep, new Character(jeepFrames), this.rTater, new Point(100, 100));
         }
 
         protected override void UnloadContent()
@@ -92,7 +95,8 @@ namespace MonoGameTests
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             UpdateTheLine(kState);
             // TODO: Add your update logic here
-            this.rTater.Update(deltaTime);
+            player.Update(gameTime, kState, GamePad.GetState(0));
+            //this.rTater.Update(deltaTime);
             base.Update(gameTime);
         }
 
@@ -106,6 +110,9 @@ namespace MonoGameTests
 
             // TODO: Add your drawing code here
             this.spriteBatch.Begin();
+
+            player.Draw();
+
             this.spriteBatch.DrawString(this.arial, this.rTater.CurrentAngle.ToString(), new Vector2(50, 50), Color.DarkGreen);
             this.spriteBatch.DrawLine(new Vector2(400, 400), 100, this.rTater.CurrentAngle, Color.White);
             this.spriteBatch.End();

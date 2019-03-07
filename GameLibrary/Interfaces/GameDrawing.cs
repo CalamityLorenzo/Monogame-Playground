@@ -12,4 +12,9 @@ namespace GameLibrary.Interfaces
     {
         void Draw();
     }
+
+    public interface IGameContainerDrawing :IGameContainerUpdate
+    {
+        void Draw();
+    }
 }
