@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Animation\Character.cs" />
     <Compile Include="Animation\FramesGenerator.cs" />
     <Compile Include="Animation\FramesInfo.cs" />
     <Compile Include="AppObjects\Rotator.cs" />
