@@ -259,3 +259,20 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/Libs/SharpDX.xml
+/Libs/SharpDX.XInput.xml
+/Libs/SharpDX.XInput.dll
+/Libs/SharpDX.XAudio2.xml
+/Libs/SharpDX.XAudio2.dll
+/Libs/SharpDX.MediaFoundation.xml
+/Libs/SharpDX.MediaFoundation.dll
+/Libs/SharpDX.DXGI.xml
+/Libs/SharpDX.DXGI.dll
+/Libs/SharpDX.dll
+/Libs/SharpDX.Direct3D11.xml
+/Libs/SharpDX.Direct3D11.dll
+/Libs/SharpDX.Direct2D1.xml
+/Libs/SharpDX.Direct2D1.dll
+/Libs/MonoGame.Framework.xml
+/Libs/MonoGame.Framework.dll
+/Libs
