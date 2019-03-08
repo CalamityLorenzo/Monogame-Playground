@@ -78,8 +78,12 @@ namespace GameLibrary.AppObjects
         public void Update(float delta)
         {
             // delta time since last update
+            // are we stopped or moving?
             if (this.State != RotatorState.Stopped && this.State != RotatorState.Unknown)
             {
+
+                UpdatePosition(delta);
+
                 if (IsAngleMatched(this.State, DestinationAngle, CurrentAngle, PreviousAngle))
                 {
                     //// if the integer matches we can stop
@@ -87,21 +91,19 @@ namespace GameLibrary.AppObjects
                     //{
                     this.State = RotatorState.Stopped;
                     this.CurrentAngle = DestinationAngle;
-                    this.PreviousAngle = CurrentAngle;
-
                     //}
                 }
-                else
-                {
-                    this.PreviousAngle = CurrentAngle;
-                    UpdatePosition(delta);
-                }
+                this.PreviousAngle = CurrentAngle;
 
             }
         }
 
         private bool IsAngleMatched(RotatorState state, float destinationAngle, float currentAngle, float previousAngle)
         {
+            // Degenerate case 
+            if (destinationAngle == currentAngle)
+                return true;
+
             // COs we are dealing with velocities
             // we can miss our angle, so we need to check a range.
             // Howver it's not a simple number line, but a clock. so caution is erquired,
@@ -126,17 +128,17 @@ namespace GameLibrary.AppObjects
 
             if (state == RotatorState.Increase)
             {
-                lowerbound = (currentAngle - angleDistance > 0) ? currentAngle - angleDistance : 360 + (currentAngle - angleDistance);
-                upperbound = currentAngle;
+                lowerbound = (currentAngle - angleDistance > 0) ? currentAngle - angleDistance : (destinationAngle != 0f) ? 360 + (currentAngle - angleDistance) : currentAngle - angleDistance;
+                upperbound = (int)Math.Floor(currentAngle);
             }
             else
             {
-                lowerbound = currentAngle;
-                upperbound = (currentAngle + angleDistance) % 360;
+                lowerbound = (int)Math.Floor(currentAngle);
+                upperbound = (destinationAngle != 0f) ? (currentAngle + angleDistance) % 360 : currentAngle + angleDistance;
 
             }
 
-            if (lowerbound < destinationAngle && upperbound > destinationAngle)
+            if (lowerbound <= destinationAngle && upperbound >= destinationAngle)
             {
                 return true;
             }
