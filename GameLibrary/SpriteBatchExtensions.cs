@@ -41,7 +41,7 @@ namespace GameLibrary.Extensions
             var endY = (unitV.X * sn) - (unitV.Y * cs);
 
             // negation of x was ngation of y not sure why it works.
-            var endPoint = start + new Vector2((float)-endX, (float)endY);
+            var endPoint = start + new Vector2((float)Math.Floor(-endX), (float)endY);
             // create the list of points
             var lineData = Bresenham.GetLine(start.ToPoint(), endPoint.ToPoint());
 
