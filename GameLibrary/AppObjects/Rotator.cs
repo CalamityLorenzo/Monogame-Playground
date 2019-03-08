@@ -38,6 +38,7 @@ namespace GameLibrary.AppObjects
         public void SetDestinationAngle(float angleToSet)
         {
             this.DestinationAngle = angleToSet % 360;
+            if (DestinationAngle == CurrentAngle) return;
             // Now set the Wsdirect we need to go.
             if (this.DestinationAngle > CurrentAngle)
             {
@@ -110,7 +111,13 @@ namespace GameLibrary.AppObjects
             var angleRange = (state == RotatorState.Increase) ? currentAngle - previousAngle : previousAngle - currentAngle;
             // 2. Make sure it's modulo 360 (handling negatives)
             var cleanNegative = 0f;
-            cleanNegative = (angleRange < 0f) ? 360f + angleRange : angleRange;
+            //cleanNegative = (angleRange < 0f) ? 
+            //        360f + angleRange 
+            //        : angleRange;
+            if (angleRange < 0f)
+                cleanNegative = 360f + angleRange;
+            else
+                cleanNegative = angleRange;
 
             var angleDistance = (float)Math.Floor(cleanNegative % 360);
             // 3. Is Our angle in the range from Current to Current-DistanceSinceLastUpdate.

@@ -26,6 +26,8 @@ namespace MonoGameTests
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 400;
+            graphics.PreferredBackBufferHeight = 400;
             Content.RootDirectory = "Content";
         }
 
@@ -47,7 +49,7 @@ namespace MonoGameTests
 
             baseJeep = Texture2d.FromFileName(this.GraphicsDevice, "Content/Jeep.png");
             var jeepFrames = FramesGenerator.GenerateFrames( new FrameInfo(243, 243), new Point(baseJeep.Width, baseJeep.Height));
-            player = new PlayerContainer(this.spriteBatch, this.baseJeep, new Character(jeepFrames), this.rTater, new Point(100, 100));
+            player = new PlayerContainer(this.spriteBatch, this.baseJeep, new Character(jeepFrames), this.rTater, new Point(150, 200));
         }
 
         protected override void UnloadContent()
@@ -100,10 +102,6 @@ namespace MonoGameTests
             base.Update(gameTime);
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
@@ -113,8 +111,8 @@ namespace MonoGameTests
 
             player.Draw();
 
-            this.spriteBatch.DrawString(this.arial, this.rTater.CurrentAngle.ToString(), new Vector2(50, 50), Color.DarkGreen);
-            this.spriteBatch.DrawLine(new Vector2(400, 400), 100, this.rTater.CurrentAngle, Color.White);
+            this.spriteBatch.DrawString(this.arial, Math.Floor(this.rTater.CurrentAngle).ToString(), new Vector2(50, 50), Color.DarkGreen);
+            this.spriteBatch.DrawLine(new Vector2(50, 50), 50, this.rTater.CurrentAngle, Color.White);
             this.spriteBatch.End();
 
 
