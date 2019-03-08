@@ -60,7 +60,7 @@ namespace GameLibrary.AppObjects
 
                 }
             }
-           }
+        }
 
         public void SetState(RotatorState state)
         {
@@ -71,6 +71,7 @@ namespace GameLibrary.AppObjects
         public void StopRotation()
         {
             this.State = RotatorState.Stopped;
+            this.PreviousAngle = CurrentAngle;
         }
 
         public void Update(float delta)
@@ -80,20 +81,21 @@ namespace GameLibrary.AppObjects
             {
                 if (IsAngleMatched(this.State, DestinationAngle, CurrentAngle, PreviousAngle))
                 {
-                    // if the integer matches we can stop
-                    if (Math.Floor(CurrentAngle) == Math.Floor(DestinationAngle))
-                    {
-                        this.State = RotatorState.Stopped;
-                        this.CurrentAngle = DestinationAngle;
-                        this.PreviousAngle = CurrentAngle;
+                    //// if the integer matches we can stop
+                    //if (Math.Floor(CurrentAngle) == Math.Floor(DestinationAngle))
+                    //{
+                    this.State = RotatorState.Stopped;
+                    this.CurrentAngle = DestinationAngle;
+                    this.PreviousAngle = CurrentAngle;
 
-                    }
-                    else
-                    {
-                        this.PreviousAngle = CurrentAngle;
-                        UpdatePosition(delta);
-                    }
+                    //}
                 }
+                else
+                {
+                    this.PreviousAngle = CurrentAngle;
+                    UpdatePosition(delta);
+                }
+
             }
         }
 
@@ -102,14 +104,37 @@ namespace GameLibrary.AppObjects
             // COs we are dealing with velocities
             // we can miss our angle, so we need to check a range.
             // Howver it's not a simple number line, but a clock. so caution is erquired,
-
+            if (state != RotatorState.Increase && state != RotatorState.Decrease)
+                throw new Exception("Rotator all out of whack");
             // 1. Get the difference between current and previous update 
-            var angleDistance = (state == RotatorState.Increase) ? currentAngle - previousAngle : previousAngle - currentAngle;
-            // 2. Make sure it's modulo 360
+            var angleRange = (state == RotatorState.Increase) ? currentAngle - previousAngle : previousAngle - currentAngle;
+            // 2. Make sure it's modulo 360 (handling negatives)
+            var cleanNegative = 0f;
+            cleanNegative = (angleRange < 0f) ? 360f + angleRange : angleRange;
 
+            var angleDistance = (float)Math.Floor(cleanNegative % 360);
             // 3. Is Our angle in the range from Current to Current-DistanceSinceLastUpdate.
+            var lowerbound = 0f;
+            var upperbound = 0f;
 
-            throw new NotImplementedException();
+            if (state == RotatorState.Increase)
+            {
+                lowerbound = (currentAngle - angleDistance > 0) ? currentAngle - angleDistance : 360 + (currentAngle - angleDistance);
+                upperbound = currentAngle;
+            }
+            else
+            {
+                lowerbound = currentAngle;
+                upperbound = (currentAngle + angleDistance) % 360;
+
+            }
+
+            if (lowerbound < destinationAngle && upperbound > destinationAngle)
+            {
+                return true;
+            }
+            return false;
+
         }
 
         private void UpdatePosition(float delta)
