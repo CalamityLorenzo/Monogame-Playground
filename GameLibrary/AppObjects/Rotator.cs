@@ -107,22 +107,12 @@ namespace GameLibrary.AppObjects
 
             // COs we are dealing with velocities
             // we can miss our angle, so we need to check a range.
-            // Howver it's not a simple number line, but a clock. so caution is erquired,
+            // Howver it's not a simple number line, but a clock. so caution is required,
             if (state != RotatorState.Clockwise && state != RotatorState.Widdershins)
                 throw new Exception("Rotator all out of whack");
-            // 1. Get the difference between current and previous update 
-            var angleRange = (state == RotatorState.Clockwise) ? currentAngle - previousAngle : previousAngle - currentAngle;
-            // 2. Make sure it's modulo 360 (handling negatives)
-            var cleanNegative = 0f;
-            //cleanNegative = (angleRange < 0f) ? 
-            //        360f + angleRange 
-            //        : angleRange;
-            if (angleRange < 0f)
-                cleanNegative = 360f + angleRange;
-            else
-                cleanNegative = angleRange;
+            // 1. Get the difference between current and previous update (the direction informs this...Though it's not the end of t
+            var angleDistance = (state == RotatorState.Clockwise) ? currentAngle - previousAngle : previousAngle - currentAngle;
 
-            var angleDistance = angleRange; // (float)Math.Floor(cleanNegative % 360);
             // 3. Is Our angle in the range from Current to Current-DistanceSinceLastUpdate.
             var lowerbound = 0f;
             var upperbound = 0f;
@@ -130,29 +120,21 @@ namespace GameLibrary.AppObjects
             if (state == RotatorState.Clockwise)
             {
                 lowerbound = currentAngle - angleDistance;
-                upperbound = (int)Math.Floor(currentAngle);
-                if (lowerbound > upperbound)
-                {
-                    var temp = lowerbound;
-                    upperbound = upperbound + 360f;
-                }
-                // if upper is greater than lower
-                // mash it from 360f, as we have clockwised the clock.
-                if (lowerbound > upperbound)
-                {
-                    lowerbound = lowerbound - 360f;
-                }
+                upperbound = (int)Math.Floor(currentAngle) %360f; // Current angle can read as 360. This may be a bug...Not confident enough to pull it apart.
             }
             else
             {
-                lowerbound = (int)Math.Floor(currentAngle);
+                lowerbound = (int)Math.Floor(currentAngle); // notice same change not applied as above.
                 upperbound = (angleDistance > 0f) ? currentAngle + angleDistance : 360f + angleDistance;
-                // if lower is greater than upper
-                // subtract it from 360f, we have widdershined around the clock.
-                if (lowerbound > upperbound)
-                {
-                    lowerbound = lowerbound - 360f;
-                }
+            }
+
+            // if lower is greater than upper
+            // we have widdershined/Clockwised around the clock. So we are calculating from the previous/next loop around.
+            // or more numbersie we are using the strict numberline and not the modulo.
+            // This is an odd way of managing state. We only know we've gone/goingthe clock if the one of the numbers are outside the range
+            if (lowerbound > upperbound)
+            {
+                lowerbound = lowerbound - 360f;
             }
             // Finally is our destination angle between the lower/upperbound
             if (lowerbound <= destinationAngle && upperbound >= destinationAngle)
@@ -181,7 +163,7 @@ namespace GameLibrary.AppObjects
 
             if (this.CurrentAngle < 0)
             {
-                // We add this becuase Current angle is a negative.
+                // We add this becuase Current angle is a negative (We rolled back across the boundary to previous clock).
                 // and require the modulo version of the angle.((Counterclockwise from 0)
                 this.CurrentAngle = 360f + CurrentAngle;
             }
