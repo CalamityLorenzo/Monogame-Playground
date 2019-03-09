@@ -152,15 +152,31 @@ namespace GameLibrary.AppObjects
             if (state == RotatorState.Increase)
             {
                 //lowerbound = (currentAngle - angleDistance > 0) ? currentAngle - angleDistance : (destinationAngle != 0f) ? 360 + (currentAngle - angleDistance) : currentAngle - angleDistance;
-                lowerbound = (currentAngle - angleDistance > 0) ? currentAngle - angleDistance : 360 + (currentAngle - angleDistance);
-
+                lowerbound = currentAngle - angleDistance;
                 upperbound = (int)Math.Floor(currentAngle);
+                if (lowerbound > upperbound)
+                {
+                    var temp = lowerbound;
+                    upperbound = upperbound + 360f;
+                }
+                // if upper is greater than lower
+                // mash it from 360f, as we have clockwised the clock.
+                if (lowerbound > upperbound)
+                {
+                    lowerbound = lowerbound - 360f;
+                }
             }
             else
             {
-                upperbound =  currentAngle + angleDistance;
                 lowerbound = (int)Math.Floor(currentAngle);
+                upperbound = (angleDistance > 0f) ? currentAngle + angleDistance : 360f + angleDistance;
 
+                // if lower is greater than upper
+                // subtract it from 360f, we have widdershined around the clock.
+                if (lowerbound > upperbound)
+                {
+                    lowerbound = lowerbound - 360f;
+                }
             }
 
             /// swap if one twas bigger than t'other

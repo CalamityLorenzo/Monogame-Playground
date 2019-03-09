@@ -46,7 +46,7 @@ namespace MonoGameTests
             // TODO: use this.Content to load your game content here
             arial = this.Content.Load<SpriteFont>("Arial");
 
-            this.rTater = new Rotator(66, 180);
+            this.rTater = new Rotator(348, 180);
             baseJeep = Texture2d.FromFileName(this.GraphicsDevice, "Content/Jeep.png");
             var jeepFrames = FramesGenerator.GenerateFrames( new FrameInfo(243, 243), new Point(baseJeep.Width, baseJeep.Height));
             player = new PlayerContainer(this.spriteBatch, this.baseJeep, new Character(jeepFrames), this.rTater, new Point(100, 125));
