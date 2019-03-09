@@ -12,8 +12,8 @@ namespace GameLibrary.AppObjects
     public enum RotatorState
     {
         Unknown = 0,
-        Increase,
-        Decrease,
+        Clockwise,
+        Widdershins,
         Stopped
     }
 
@@ -49,20 +49,20 @@ namespace GameLibrary.AppObjects
             {
                 if (DestinationAngle - CurrentAngle > 179f)
                 {
-                    this.State = RotatorState.Decrease;
+                    this.State = RotatorState.Widdershins;
                 }
                 else
                 {
-                    this.State = RotatorState.Increase;
+                    this.State = RotatorState.Clockwise;
                 }
             }
             else
             {
                 if (CurrentAngle - DestinationAngle > 179f)
-                    this.State = RotatorState.Increase;
+                    this.State = RotatorState.Clockwise;
                 else
                 {
-                    this.State = RotatorState.Decrease;
+                    this.State = RotatorState.Widdershins;
 
                 }
             }
@@ -73,7 +73,7 @@ namespace GameLibrary.AppObjects
             this.State = state;
         }
 
-        // Basically when you lift a finer it stops
+        // Basically when you lift a finger it stops
         public void StopRotation()
         {
             this.State = RotatorState.Stopped;
@@ -91,34 +91,12 @@ namespace GameLibrary.AppObjects
 
                 if (IsAngleMatched(this.State, DestinationAngle, CurrentAngle, PreviousAngle))
                 {
-                    //// if the integer matches we can stop
-                    //if (Math.Floor(CurrentAngle) == Math.Floor(DestinationAngle))
-                    //{
                     this.State = RotatorState.Stopped;
                     this.CurrentAngle = DestinationAngle;
-                    //}
                 }
+
                 this.PreviousAngle = CurrentAngle;
-
             }
-        }
-
-        private bool IsAngeMatched2(RotatorState state, float destinationAngle, float currentAngle, float previousAngle)
-        {
-            // Degenerate case 
-            if (destinationAngle == currentAngle)
-                return true;
-
-            // COs we are dealing with velocities
-            // we can miss our angle, so we need to check a range.
-            // Howver it's not a simple number line, but a clock. so caution is erquired,
-            if (state != RotatorState.Increase && state != RotatorState.Decrease)
-                throw new Exception("Rotator all out of whack");
-            // 1. Get the difference between current and previous update 
-            var angleRange = (state == RotatorState.Increase) ? currentAngle - previousAngle : previousAngle - currentAngle;
-
-
-            return false;
         }
 
         private bool IsAngleMatched(RotatorState state, float destinationAngle, float currentAngle, float previousAngle)
@@ -130,10 +108,10 @@ namespace GameLibrary.AppObjects
             // COs we are dealing with velocities
             // we can miss our angle, so we need to check a range.
             // Howver it's not a simple number line, but a clock. so caution is erquired,
-            if (state != RotatorState.Increase && state != RotatorState.Decrease)
+            if (state != RotatorState.Clockwise && state != RotatorState.Widdershins)
                 throw new Exception("Rotator all out of whack");
             // 1. Get the difference between current and previous update 
-            var angleRange = (state == RotatorState.Increase) ? currentAngle - previousAngle : previousAngle - currentAngle;
+            var angleRange = (state == RotatorState.Clockwise) ? currentAngle - previousAngle : previousAngle - currentAngle;
             // 2. Make sure it's modulo 360 (handling negatives)
             var cleanNegative = 0f;
             //cleanNegative = (angleRange < 0f) ? 
@@ -149,9 +127,8 @@ namespace GameLibrary.AppObjects
             var lowerbound = 0f;
             var upperbound = 0f;
 
-            if (state == RotatorState.Increase)
+            if (state == RotatorState.Clockwise)
             {
-                //lowerbound = (currentAngle - angleDistance > 0) ? currentAngle - angleDistance : (destinationAngle != 0f) ? 360 + (currentAngle - angleDistance) : currentAngle - angleDistance;
                 lowerbound = currentAngle - angleDistance;
                 upperbound = (int)Math.Floor(currentAngle);
                 if (lowerbound > upperbound)
@@ -170,7 +147,6 @@ namespace GameLibrary.AppObjects
             {
                 lowerbound = (int)Math.Floor(currentAngle);
                 upperbound = (angleDistance > 0f) ? currentAngle + angleDistance : 360f + angleDistance;
-
                 // if lower is greater than upper
                 // subtract it from 360f, we have widdershined around the clock.
                 if (lowerbound > upperbound)
@@ -178,15 +154,7 @@ namespace GameLibrary.AppObjects
                     lowerbound = lowerbound - 360f;
                 }
             }
-
-            /// swap if one twas bigger than t'other
-            if (lowerbound > upperbound)
-            {
-                var temp = lowerbound;
-                lowerbound = upperbound;
-                upperbound = temp;
-            }
-
+            // Finally is our destination angle between the lower/upperbound
             if (lowerbound <= destinationAngle && upperbound >= destinationAngle)
             {
                 return true;
@@ -199,10 +167,10 @@ namespace GameLibrary.AppObjects
         {
             switch (this.State)
             {
-                case RotatorState.Increase:
+                case RotatorState.Clockwise:
                     this.CurrentAngle = (CurrentAngle + (RatePerSecond * delta)) % 360f;
                     break;
-                case RotatorState.Decrease:
+                case RotatorState.Widdershins:
                     this.CurrentAngle = (CurrentAngle - (RatePerSecond * delta)) % 360f;
                     break;
                 case RotatorState.Stopped:
