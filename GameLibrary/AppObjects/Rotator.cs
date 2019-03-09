@@ -17,6 +17,7 @@ namespace GameLibrary.AppObjects
         Stopped
     }
 
+    // Allows you to rotate a set amount degrees per second
     public class Rotator : IGameObjectUpdate
     {
 

@@ -5,10 +5,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameLibrary.Player
 {
@@ -101,27 +97,55 @@ namespace GameLibrary.Player
                     break;
             }
         }
+        private Action<Keys, float, KeyboardState, KeyboardState, Rotator> keyPressed = (key, angle, currentKeyboardState, previousKeyboardState, rTater) =>
+        {
+            if (currentKeyboardState.IsKeyDown(key) && !previousKeyboardState.IsKeyDown(key))
+            {
+                rTater.SetDestinationAngle(angle);
+            }
+
+            if (currentKeyboardState.IsKeyUp(key) && !previousKeyboardState.IsKeyUp(key))
+            {
+                rTater.StopRotation();
+            }
+        };
+
+        private Action<Keys,Keys, float, float, float, KeyboardState, KeyboardState, Rotator> keysPressed = (key, key2, angle, firstAngle, secondAngle, currentKeyboardState, previousKeyboardState, rTater) =>
+        {
+            if (currentKeyboardState.IsKeyDown(key) && currentKeyboardState.IsKeyDown(key2))
+            {
+                rTater.SetDestinationAngle(angle);
+            }
+            
+            if (currentKeyboardState.IsKeyUp(key) && !previousKeyboardState.IsKeyUp(key) && (currentKeyboardState.IsKeyDown(key2)))
+            {
+                rTater.SetDestinationAngle(secondAngle);
+            }
+
+            if (currentKeyboardState.IsKeyUp(key2) && !previousKeyboardState.IsKeyUp(key2) && (currentKeyboardState.IsKeyDown(key)))
+            {
+                rTater.SetDestinationAngle(firstAngle);
+            }
+        };
+
 
         private void InputUpdate(KeyboardState currentKeyboardState, GamePadState padState)
         {
-            Action<Keys, float> keyPressed = (key, angle) =>
+            // Check for multiples first
+            if (currentKeyboardState.GetPressedKeys().Length>1){
+                keysPressed(Keys.W, Keys.D, 45f, 0f, 90f, currentKeyboardState, previousKeyboardState, rTater);
+                keysPressed(Keys.W, Keys.A, 315f, 0f, 270f, currentKeyboardState, previousKeyboardState, rTater);
+                keysPressed(Keys.S, Keys.A, 225f, 180f, 270f, currentKeyboardState, previousKeyboardState, rTater);
+                keysPressed(Keys.S, Keys.D, 135f, 180f, 90f, currentKeyboardState, previousKeyboardState, rTater);
+
+            }
+            else
             {
-                if (currentKeyboardState.IsKeyDown(key) && !previousKeyboardState.IsKeyDown(key))
-                {
-                    this.rTater.SetDestinationAngle(angle);
-                }
-
-                if (currentKeyboardState.IsKeyUp(key) && !previousKeyboardState.IsKeyUp(key))
-                {
-                    this.rTater.StopRotation();
-                }
-            };
-
-            keyPressed(Keys.D, 90f);
-            keyPressed(Keys.W, 0f);
-            keyPressed(Keys.S, 180f);
-            keyPressed(Keys.A, 270f);
-
+                keyPressed(Keys.D, 90f, currentKeyboardState, previousKeyboardState, rTater);
+                keyPressed(Keys.W, 0f, currentKeyboardState, previousKeyboardState, rTater);
+                keyPressed(Keys.S, 180f, currentKeyboardState, previousKeyboardState, rTater);
+                keyPressed(Keys.A, 270f, currentKeyboardState, previousKeyboardState, rTater);
+            }
         }
     }
 }

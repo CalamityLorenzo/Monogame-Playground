@@ -95,7 +95,7 @@ namespace MonoGameTests
                 Exit();
 
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            UpdateTheLine(kState);
+          //  UpdateTheLine(kState);
             // TODO: Add your update logic here
             player.Update(gameTime, kState, GamePad.GetState(0));
             //this.rTater.Update(deltaTime);
