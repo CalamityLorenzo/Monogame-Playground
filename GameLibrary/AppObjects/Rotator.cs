@@ -22,7 +22,7 @@ namespace GameLibrary.AppObjects
 
         public float CurrentAngle { get; private set; }
         private float PreviousAngle { get; set; }
-        public float AnglesPerSecond { get; private set; }
+        public float RatePerSecond { get; private set; }
         public RotatorState State { get; private set; }
         public float DestinationAngle { get; private set; }
 
@@ -31,8 +31,13 @@ namespace GameLibrary.AppObjects
             CurrentAngle = startAngle;
             this.PreviousAngle = CurrentAngle;
             this.DestinationAngle = startAngle;
-            AnglesPerSecond = anglesPerSecond;
+            RatePerSecond = anglesPerSecond;
             this.State = RotatorState.Unknown;
+        }
+
+        public void UpdateRate(float anglesPerSecond)
+        {
+            RatePerSecond = anglesPerSecond;
         }
 
         public void SetDestinationAngle(float angleToSet)
@@ -98,6 +103,24 @@ namespace GameLibrary.AppObjects
             }
         }
 
+        private bool IsAngeMatched2(RotatorState state, float destinationAngle, float currentAngle, float previousAngle)
+        {
+            // Degenerate case 
+            if (destinationAngle == currentAngle)
+                return true;
+
+            // COs we are dealing with velocities
+            // we can miss our angle, so we need to check a range.
+            // Howver it's not a simple number line, but a clock. so caution is erquired,
+            if (state != RotatorState.Increase && state != RotatorState.Decrease)
+                throw new Exception("Rotator all out of whack");
+            // 1. Get the difference between current and previous update 
+            var angleRange = (state == RotatorState.Increase) ? currentAngle - previousAngle : previousAngle - currentAngle;
+
+
+            return false;
+        }
+
         private bool IsAngleMatched(RotatorState state, float destinationAngle, float currentAngle, float previousAngle)
         {
             // Degenerate case 
@@ -121,21 +144,31 @@ namespace GameLibrary.AppObjects
             else
                 cleanNegative = angleRange;
 
-            var angleDistance = (float)Math.Floor(cleanNegative % 360);
+            var angleDistance = angleRange; // (float)Math.Floor(cleanNegative % 360);
             // 3. Is Our angle in the range from Current to Current-DistanceSinceLastUpdate.
             var lowerbound = 0f;
             var upperbound = 0f;
 
             if (state == RotatorState.Increase)
             {
-                lowerbound = (currentAngle - angleDistance > 0) ? currentAngle - angleDistance : (destinationAngle != 0f) ? 360 + (currentAngle - angleDistance) : currentAngle - angleDistance;
+                //lowerbound = (currentAngle - angleDistance > 0) ? currentAngle - angleDistance : (destinationAngle != 0f) ? 360 + (currentAngle - angleDistance) : currentAngle - angleDistance;
+                lowerbound = (currentAngle - angleDistance > 0) ? currentAngle - angleDistance : 360 + (currentAngle - angleDistance);
+
                 upperbound = (int)Math.Floor(currentAngle);
             }
             else
             {
+                upperbound =  currentAngle + angleDistance;
                 lowerbound = (int)Math.Floor(currentAngle);
-                upperbound = (destinationAngle != 0f) ? (currentAngle + angleDistance) % 360 : currentAngle + angleDistance;
 
+            }
+
+            /// swap if one twas bigger than t'other
+            if (lowerbound > upperbound)
+            {
+                var temp = lowerbound;
+                lowerbound = upperbound;
+                upperbound = temp;
             }
 
             if (lowerbound <= destinationAngle && upperbound >= destinationAngle)
@@ -151,10 +184,10 @@ namespace GameLibrary.AppObjects
             switch (this.State)
             {
                 case RotatorState.Increase:
-                    this.CurrentAngle = (CurrentAngle + (AnglesPerSecond * delta)) % 360f;
+                    this.CurrentAngle = (CurrentAngle + (RatePerSecond * delta)) % 360f;
                     break;
                 case RotatorState.Decrease:
-                    this.CurrentAngle = (CurrentAngle - (AnglesPerSecond * delta)) % 360f;
+                    this.CurrentAngle = (CurrentAngle - (RatePerSecond * delta)) % 360f;
                     break;
                 case RotatorState.Stopped:
                 case RotatorState.Unknown:

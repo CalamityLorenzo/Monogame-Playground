@@ -35,7 +35,7 @@ namespace GameLibrary.Player
         public Point CurrentPosition => this._currentPosition;
         public void Draw()
         {
-            _spriteBatch.Draw(this.Atlas, CurrentPosition.ToVector2(),  this.playerCharacter.CurrentDisplayFrame, Color.White);
+            _spriteBatch.Draw(this.Atlas, CurrentPosition.ToVector2(),  null, this.playerCharacter.CurrentDisplayFrame, Vector2.Zero, 0f, new Vector2(0.25f, 0.25f));
         }
 
         public void Update(GameTime time, KeyboardState keystate, GamePadState padState)
