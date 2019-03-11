@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLibrary", "GameLibrary\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OutsideTheframe", "OutsideTheframe\OutsideTheframe.csproj", "{4F7B2B06-8EB3-480A-894F-C7B80036C714}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLibrary.Config", "GameLibrary.Config\GameLibrary.Config.csproj", "{3AAE98F2-2384-426D-A20D-605B549A1F83}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,14 @@ Global
 		{4F7B2B06-8EB3-480A-894F-C7B80036C714}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4F7B2B06-8EB3-480A-894F-C7B80036C714}.Release|x86.ActiveCfg = Release|Any CPU
 		{4F7B2B06-8EB3-480A-894F-C7B80036C714}.Release|x86.Build.0 = Release|Any CPU
+		{3AAE98F2-2384-426D-A20D-605B549A1F83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AAE98F2-2384-426D-A20D-605B549A1F83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AAE98F2-2384-426D-A20D-605B549A1F83}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3AAE98F2-2384-426D-A20D-605B549A1F83}.Debug|x86.Build.0 = Debug|Any CPU
+		{3AAE98F2-2384-426D-A20D-605B549A1F83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AAE98F2-2384-426D-A20D-605B549A1F83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AAE98F2-2384-426D-A20D-605B549A1F83}.Release|x86.ActiveCfg = Release|Any CPU
+		{3AAE98F2-2384-426D-A20D-605B549A1F83}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

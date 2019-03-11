@@ -1,0 +1,15 @@
+{
+  "Options": {
+    "ScreenWidth": 50,
+    "ScreenHeight": 50
+  },
+  "Player1Controls": {
+    "Up": "W",
+    "Down": "S",
+    "Left": "A",
+    "Right": "D",
+    "Fire": "Return",
+    "Action": "L_Ctrl",
+    "Special":  "SpaceBar"
+  }
+}
