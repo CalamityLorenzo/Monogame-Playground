@@ -9,7 +9,7 @@
     "Left": "A",
     "Right": "D",
     "Fire": "Return",
-    "Action": "L_Ctrl",
+    "Action": "LeftCtrl",
     "Special":  "SpaceBar"
   }
 }

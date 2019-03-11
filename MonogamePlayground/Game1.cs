@@ -1,11 +1,13 @@
 ﻿using GameLibrary.Animation;
 using GameLibrary.AppObjects;
+using GameLibrary.Config.App;
 using GameLibrary.Extensions;
 using GameLibrary.Player;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 using Texture2D = Microsoft.Xna.Framework.Graphics.Texture2D;
 
 namespace MonoGameTests
@@ -19,6 +21,7 @@ namespace MonoGameTests
         SpriteBatch spriteBatch;
         SpriteFont arial;
         Rotator rTater;
+        ConfigurationData configData;
         PlayerContainer player;
         Microsoft.Xna.Framework.Graphics.Texture2D baseJeep;
         public KeyboardState previousKeyState { get; private set; }
@@ -29,6 +32,14 @@ namespace MonoGameTests
             graphics.PreferredBackBufferWidth = 400;
             graphics.PreferredBackBufferHeight = 400;
             Content.RootDirectory = "Content";
+
+            this.configData = Configuration.Manager
+                    .LoadJsonFile("opts.json")
+                    .LoadJsonFile("opts2.json")
+                    .Build();
+
+            var player1Dictionary = configData.ToResultType<Dictionary<string,string>>("Player1Controls");
+            var player2Dictionary = configData.ToResultType<Dictionary<string,string>>("Player2Controls");
         }
 
 

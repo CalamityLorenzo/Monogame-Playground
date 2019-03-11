@@ -62,6 +62,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="Icon.ico" />
+    <None Include="opts2.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="opts.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +76,10 @@
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GameLibrary.Config\GameLibrary.Config.csproj">
+      <Project>{3aae98f2-2384-426d-a20d-605b549a1f83}</Project>
+      <Name>GameLibrary.Config</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GameLibrary\GameLibrary.csproj">
       <Project>{46cfea54-2f20-4bca-b217-ea14874cc69f}</Project>
       <Name>GameLibrary</Name>

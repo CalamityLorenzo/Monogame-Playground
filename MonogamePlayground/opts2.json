@@ -1,0 +1,11 @@
+{
+  "Player2Controls": {
+    "Up": "Up",
+    "Down": "Down",
+    "Left": "Left",
+    "Right": "Rigt",
+    "Fire": "Enter",
+    "Action": "RightCtrl",
+    "Special": "RightShift"
+  }
+}

@@ -9,17 +9,37 @@ using System.Threading.Tasks;
 
 namespace GameLibrary.Config.App
 {
+    public class ConfigurationData
+    {
+        private List<JObject> ConfigData;
+        internal ConfigurationData(List<JObject> configData)
+        {
+            ConfigData = new List<JObject>(configData);
+        }
+
+        public T ToResultType<T>(string propertyName, Func<string, T> mapFunc) where T : class
+        {
+            var matchedObject = this.ConfigData.FirstOrDefault(jobj => jobj.ContainsKey(propertyName));
+            return (matchedObject != null) ? mapFunc(matchedObject[propertyName].ToString()) : null;
+        }
+
+        public T ToResultType<T>(string propertyName) where T : class
+        {
+            var matchedObject = this.ConfigData.FirstOrDefault(jobj => jobj.ContainsKey(propertyName));
+            return (matchedObject != null) ? JsonConvert.DeserializeObject<T>(matchedObject[propertyName].ToString()) : null;
+        }
+    }
     public class Configuration
     {
-        private static Lazy<Configuration> configInstance = new Lazy<Configuration>();
+        private static Lazy<Configuration> configInstance = new Lazy<Configuration>(()=>new Configuration());
         private Configuration() { }
         private bool BuildComplete = false;
-        private static Configuration Manager => configInstance.Value;
+        public static Configuration Manager => configInstance.Value;
 
         //public Dictionary<string, string> PlayerOneControls { get; private set; }
         //public Dictionary<string, string> PlayerTwoControls { get; private set; }
         //public GameOptions GameOptions { get; private set; }
-         
+
         private Dictionary<string, string> LoadPlayerControls(string userControlSection, JObject jsonObject)
         {
             if (jsonObject.ContainsKey(userControlSection))
@@ -33,7 +53,7 @@ namespace GameLibrary.Config.App
             }
 
         }
- 
+
         private List<string> fileNames = new List<string>();
         private List<JObject> LoadedData = new List<JObject>();
 
@@ -43,14 +63,14 @@ namespace GameLibrary.Config.App
             return this;
         }
 
-        public void Build()
+        public ConfigurationData Build()
         {
             foreach (var fileName in fileNames)
             {
                 using (var reader = new StreamReader(fileName))
                 {
                     var jsonOptions = reader.ReadToEnd();
-                    LoadedData.Add(JObject.Parse(jsonOptions));  
+                    LoadedData.Add(JObject.Parse(jsonOptions));
                     //var GameOptions = LoadGameOptions("Options", allOpts);
                     //var playerOneControls = LoadPlayerControls("Player1Controls", allOpts);
                     //var playerTwoControls = LoadPlayerControls("Player2Controls", allOpts);
@@ -60,7 +80,7 @@ namespace GameLibrary.Config.App
                 }
             }
             BuildComplete = true;
-
+            return new ConfigurationData(LoadedData);
         }
 
     }
