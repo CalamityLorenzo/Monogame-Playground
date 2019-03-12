@@ -1,4 +1,5 @@
-﻿using GameLibrary.Animation;
+﻿using GameLibrary;
+using GameLibrary.Animation;
 using GameLibrary.AppObjects;
 using GameLibrary.Config.App;
 using GameLibrary.Extensions;
@@ -6,6 +7,7 @@ using GameLibrary.Player;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonogamePlayground.PlayerTHings;
 using System;
 using System.Collections.Generic;
 using Texture2D = Microsoft.Xna.Framework.Graphics.Texture2D;
@@ -40,6 +42,7 @@ namespace MonoGameTests
 
             var player1Dictionary = configData.ToResultType<Dictionary<string,string>>("Player1Controls");
             var player2Dictionary = configData.ToResultType<Dictionary<string,string>>("Player2Controls");
+          var player1Keys =   GeneralExtensions.ConvertToKeySet<KeyMapping>(player1Dictionary);
         }
 
 

@@ -8,8 +8,8 @@
     "Down": "S",
     "Left": "A",
     "Right": "D",
-    "Fire": "Return",
-    "Action": "LeftCtrl",
-    "Special":  "SpaceBar"
+    "Fire": "Enter",
+    "Action": "LeftControl",
+    "Special":  "Space"
   }
 }

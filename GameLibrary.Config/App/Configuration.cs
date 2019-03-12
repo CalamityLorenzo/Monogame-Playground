@@ -19,14 +19,14 @@ namespace GameLibrary.Config.App
 
         public T ToResultType<T>(string propertyName, Func<string, T> mapFunc) where T : class
         {
-            var matchedObject = this.ConfigData.FirstOrDefault(jobj => jobj.ContainsKey(propertyName));
-            return (matchedObject != null) ? mapFunc(matchedObject[propertyName].ToString()) : null;
+            var matchedObject = this.ConfigData.First(jobj => jobj.ContainsKey(propertyName));
+            return mapFunc(matchedObject[propertyName].ToString());
         }
 
+        // Simple Case leaning on Json.net
         public T ToResultType<T>(string propertyName) where T : class
         {
-            var matchedObject = this.ConfigData.FirstOrDefault(jobj => jobj.ContainsKey(propertyName));
-            return (matchedObject != null) ? JsonConvert.DeserializeObject<T>(matchedObject[propertyName].ToString()) : null;
+            return this.ToResultType<T>(propertyName, (str) => JsonConvert.DeserializeObject<T>(str));
         }
     }
     public class Configuration
@@ -35,24 +35,6 @@ namespace GameLibrary.Config.App
         private Configuration() { }
         private bool BuildComplete = false;
         public static Configuration Manager => configInstance.Value;
-
-        //public Dictionary<string, string> PlayerOneControls { get; private set; }
-        //public Dictionary<string, string> PlayerTwoControls { get; private set; }
-        //public GameOptions GameOptions { get; private set; }
-
-        private Dictionary<string, string> LoadPlayerControls(string userControlSection, JObject jsonObject)
-        {
-            if (jsonObject.ContainsKey(userControlSection))
-            {
-                var controlTokens = jsonObject[userControlSection];
-                return JsonConvert.DeserializeObject<Dictionary<string, string>>(controlTokens.ToString());
-            }
-            else
-            {
-                return new Dictionary<string, string>();
-            }
-
-        }
 
         private List<string> fileNames = new List<string>();
         private List<JObject> LoadedData = new List<JObject>();

@@ -51,6 +51,7 @@
     <Compile Include="Animation\FramesInfo.cs" />
     <Compile Include="AppObjects\Rotator.cs" />
     <Compile Include="Bresenham.cs" />
+    <Compile Include="GeneralExtensions.cs" />
     <Compile Include="Interfaces\GameDrawing.cs" />
     <Compile Include="Interfaces\GameUpdateable.cs" />
     <Compile Include="Player\PlayerContainer.cs" />
