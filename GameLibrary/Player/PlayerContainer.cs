@@ -1,10 +1,12 @@
 ﻿using GameLibrary.Animation;
 using GameLibrary.AppObjects;
 using GameLibrary.Interfaces;
+using GameLibrary.PlayerThings;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace GameLibrary.Player
 {
@@ -12,12 +14,16 @@ namespace GameLibrary.Player
     // or something.
     public class PlayerContainer: IGameContainerDrawing
     {
-        public PlayerContainer(SpriteBatch spriteBatch,Texture2D atlas, Character gameChar, Rotator rTater, Point startPosition)
+
+        private Dictionary<KeyMapping, Action> KeyPressToAction = new Dictionary<KeyMapping, Action>();
+
+        public PlayerContainer(SpriteBatch spriteBatch,Texture2D atlas, Character gameChar, Rotator rTater, Dictionary<Keys, KeyMapping> keyMap, Point startPosition)
         {
             _spriteBatch = spriteBatch;
             Atlas = atlas;
             playerCharacter = gameChar;
             this.rTater = rTater;
+            this.keyMap = keyMap;
             _currentPosition = startPosition;
         }
         private KeyboardState previousKeyboardState;
@@ -27,6 +33,7 @@ namespace GameLibrary.Player
         public Character playerCharacter { get; }
         public Rotator rTater { get; }
 
+        private readonly Dictionary<Keys, KeyMapping> keyMap;
         private Point _currentPosition;
         public Point CurrentPosition => this._currentPosition;
         public void Draw()

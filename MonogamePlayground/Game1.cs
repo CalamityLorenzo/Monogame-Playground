@@ -4,10 +4,10 @@ using GameLibrary.AppObjects;
 using GameLibrary.Config.App;
 using GameLibrary.Extensions;
 using GameLibrary.Player;
+using GameLibrary.PlayerThings;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonogamePlayground.PlayerTHings;
 using System;
 using System.Collections.Generic;
 using Texture2D = Microsoft.Xna.Framework.Graphics.Texture2D;
@@ -26,6 +26,7 @@ namespace MonoGameTests
         ConfigurationData configData;
         PlayerContainer player;
         Microsoft.Xna.Framework.Graphics.Texture2D baseJeep;
+        Dictionary<Keys, KeyMapping> player1Keys;
         public KeyboardState previousKeyState { get; private set; }
 
         public Game1()
@@ -40,9 +41,9 @@ namespace MonoGameTests
                     .LoadJsonFile("opts2.json")
                     .Build();
 
-            var player1Dictionary = configData.ToResultType<Dictionary<string,string>>("Player1Controls");
-            var player2Dictionary = configData.ToResultType<Dictionary<string,string>>("Player2Controls");
-          var player1Keys =   GeneralExtensions.ConvertToKeySet<KeyMapping>(player1Dictionary);
+            var player1Dictionary = configData.ToResultType<Dictionary<string, string>>("Player1Controls");
+            var player2Dictionary = configData.ToResultType<Dictionary<string, string>>("Player2Controls");
+            player1Keys = GeneralExtensions.ConvertToKeySet<KeyMapping>(player1Dictionary);
         }
 
 
@@ -62,8 +63,8 @@ namespace MonoGameTests
 
             this.rTater = new Rotator(348, 180);
             baseJeep = Texture2d.FromFileName(this.GraphicsDevice, "Content/Jeep.png");
-            var jeepFrames = FramesGenerator.GenerateFrames( new FrameInfo(243, 243), new Point(baseJeep.Width, baseJeep.Height));
-            player = new PlayerContainer(this.spriteBatch, this.baseJeep, new Character(jeepFrames), this.rTater, new Point(100, 125));
+            var jeepFrames = FramesGenerator.GenerateFrames(new FrameInfo(243, 243), new Point(baseJeep.Width, baseJeep.Height));
+            player = new PlayerContainer(this.spriteBatch, this.baseJeep, new Character(jeepFrames), this.rTater, player1Keys, new Point(100, 125));
         }
 
         protected override void UnloadContent()
@@ -109,7 +110,7 @@ namespace MonoGameTests
                 Exit();
 
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-          //  UpdateTheLine(kState);
+            //  UpdateTheLine(kState);
             // TODO: Add your update logic here
             player.Update(gameTime, kState, GamePad.GetState(0));
             //this.rTater.Update(deltaTime);
@@ -125,7 +126,7 @@ namespace MonoGameTests
 
             player.Draw();
 
-            this.spriteBatch.DrawString(this.arial, Math.Floor(this.rTater.CurrentAngle).ToString(), new Vector2(10,10), Color.DarkGreen);
+            this.spriteBatch.DrawString(this.arial, Math.Floor(this.rTater.CurrentAngle).ToString(), new Vector2(10, 10), Color.DarkGreen);
             this.spriteBatch.DrawLine(new Vector2(75, 80), 50, this.rTater.CurrentAngle, Color.White);
             this.spriteBatch.End();
 
