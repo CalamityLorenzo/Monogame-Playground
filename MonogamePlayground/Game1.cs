@@ -26,7 +26,7 @@ namespace MonoGameTests
         ConfigurationData configData;
         PlayerContainer player;
         Microsoft.Xna.Framework.Graphics.Texture2D baseJeep;
-        Dictionary<Keys, KeyMapping> player1Keys;
+        Dictionary<KeyMapping, Keys> player1Keys;
         public KeyboardState previousKeyState { get; private set; }
 
         public Game1()

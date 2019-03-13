@@ -15,17 +15,7 @@ namespace GameLibrary.Player
     public class PlayerContainer: IGameContainerDrawing
     {
 
-        private Dictionary<KeyMapping, Action> KeyPressToAction = new Dictionary<KeyMapping, Action>();
-
-        public PlayerContainer(SpriteBatch spriteBatch,Texture2D atlas, Character gameChar, Rotator rTater, Dictionary<Keys, KeyMapping> keyMap, Point startPosition)
-        {
-            _spriteBatch = spriteBatch;
-            Atlas = atlas;
-            playerCharacter = gameChar;
-            this.rTater = rTater;
-            this.keyMap = keyMap;
-            _currentPosition = startPosition;
-        }
+        private Dictionary<KeyMapping, Action<KeyboardState, KeyboardState>> KeyPressToAction = new Dictionary<KeyMapping, Action<KeyboardState, KeyboardState>>();
         private KeyboardState previousKeyboardState;
         private GamePadState previousPadState;
         public SpriteBatch _spriteBatch { get; }
@@ -33,22 +23,42 @@ namespace GameLibrary.Player
         public Character playerCharacter { get; }
         public Rotator rTater { get; }
 
-        private readonly Dictionary<Keys, KeyMapping> keyMap;
+        public PlayerContainer(SpriteBatch spriteBatch,Texture2D atlas, Character gameChar, Rotator rTater, Dictionary<KeyMapping, Keys> keyMap, Point startPosition)
+        {
+            _spriteBatch = spriteBatch;
+            Atlas = atlas;
+            playerCharacter = gameChar;
+            this.rTater = rTater;
+            this.keyMap = keyMap;
+            _currentPosition = startPosition;
+
+            ConfigureKeyMappings(keyMap);
+        }
+
+        private void ConfigureKeyMappings(Dictionary<KeyMapping,Keys> keyMap)
+        {
+            this.KeyboardActions = new Dictionary<Keys, Action<KeyboardState, KeyboardState>>
+            {
+                { keyMap[KeyMapping.Up], (c,p) => keyPressed(keyMap[KeyMapping.Up], 0f, c,p, this.rTater) },
+                { keyMap[KeyMapping.Down], (c,p) => keyPressed(keyMap[KeyMapping.Down], 180f, c,p, this.rTater) },
+                { keyMap[KeyMapping.Left], (c,p) => keyPressed(keyMap[KeyMapping.Left], 270f, c,p, this.rTater) },
+                { keyMap[KeyMapping.Right], (c,p) => keyPressed(keyMap[KeyMapping.Right], 90f, c,p, this.rTater) }
+            };
+        }
+
+        private readonly Dictionary<KeyMapping, Keys> keyMap;
         private Point _currentPosition;
         public Point CurrentPosition => this._currentPosition;
-        public void Draw()
-        {
-            _spriteBatch.Draw(this.Atlas, CurrentPosition.ToVector2(),  null, this.playerCharacter.CurrentDisplayFrame, Vector2.Zero, 0f, new Vector2(0.25f, 0.25f));
-        }
+      
 
         public void Update(GameTime time, KeyboardState keystate, GamePadState padState)
         {
             var delta = (float)time.ElapsedGameTime.TotalSeconds;
-            var currentKeyboardState = keystate;
+            this.currentKeyboardState = keystate;
             var currentPadState= padState;
 
             // manage the angle
-            InputUpdate(currentKeyboardState, padState);
+            InputProcessor(currentKeyboardState, padState);
             // Set the angle
             this.rTater.Update(delta);
             // Mange the current state
@@ -104,6 +114,7 @@ namespace GameLibrary.Player
                     break;
             }
         }
+
         private Action<Keys, float, KeyboardState, KeyboardState, Rotator> keyPressed = (key, angle, currentKeyboardState, previousKeyboardState, rTater) =>
         {
             if (currentKeyboardState.IsKeyDown(key) && !previousKeyboardState.IsKeyDown(key))
@@ -134,6 +145,23 @@ namespace GameLibrary.Player
                 rTater.SetDestinationAngle(firstAngle);
             }
         };
+        private KeyboardState currentKeyboardState;
+        private Dictionary<Keys, Action<KeyboardState, KeyboardState>> KeyboardActions;
+
+        private void InputProcessor(KeyboardState currentKeyboardState, GamePadState padState)
+        {
+            //if(this.KeyboardActions.ContainsKey(currentKeyboardState.)
+
+           var currentKeys =  this.currentKeyboardState.GetPressedKeys();
+            if (currentKeys.Length == 0) return;
+            
+            foreach(var key in currentKeys)
+            {
+                if (this.KeyboardActions.ContainsKey(key))
+                    this.KeyboardActions[key](currentKeyboardState, previousKeyboardState);
+            }
+
+        }
 
 
         private void InputUpdate(KeyboardState currentKeyboardState, GamePadState padState)
@@ -153,6 +181,12 @@ namespace GameLibrary.Player
                 keyPressed(Keys.S, 180f, currentKeyboardState, previousKeyboardState, rTater);
                 keyPressed(Keys.A, 270f, currentKeyboardState, previousKeyboardState, rTater);
             }
+        }
+
+
+        public void Draw()
+        {
+            _spriteBatch.Draw(this.Atlas, CurrentPosition.ToVector2(), null, this.playerCharacter.CurrentDisplayFrame, Vector2.Zero, 0f, new Vector2(0.25f, 0.25f));
         }
     }
 }

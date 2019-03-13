@@ -9,9 +9,9 @@ namespace GameLibrary
 {
     public static class GeneralExtensions
     {
-        public static Dictionary<Keys, T> ConvertToKeySet<T>(Dictionary<string, string> keymappings) where T : struct, IConvertible
+        public static Dictionary<T, Keys> ConvertToKeySet<T>(Dictionary<string, string> keymappings) where T : struct, IConvertible
         {
-            return keymappings.ToDictionary(kvp => (Keys)Enum.Parse(typeof(Keys), kvp.Value), kvp => (T)Enum.Parse(typeof(T), kvp.Key));
+            return keymappings.ToDictionary(kvp => (T)Enum.Parse(typeof(T), kvp.Key), kvp => (Keys)Enum.Parse(typeof(Keys), kvp.Value));
         }
     }
 }
