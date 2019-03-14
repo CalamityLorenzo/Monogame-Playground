@@ -15,13 +15,49 @@ namespace GameLibrary.Player
     public class PlayerContainer: IGameContainerDrawing
     {
 
+        private readonly Dictionary<KeyMapping, Keys> keyMap;
         private Dictionary<KeyMapping, Action<KeyboardState, KeyboardState>> KeyPressToAction = new Dictionary<KeyMapping, Action<KeyboardState, KeyboardState>>();
+        private Dictionary<Keys, Action<KeyboardState, KeyboardState>> KeyboardActions;
+        private KeyboardState currentKeyboardState;
         private KeyboardState previousKeyboardState;
         private GamePadState previousPadState;
         public SpriteBatch _spriteBatch { get; }
         public Texture2D Atlas { get; }
         public Character playerCharacter { get; }
         public Rotator rTater { get; }
+
+        private Point _currentPosition;
+        public Point CurrentPosition => this._currentPosition;
+        
+        private Action<Keys, float, KeyboardState, KeyboardState, Rotator> keyPressed = (key, angle, currentKeyboardState, previousKeyboardState, rTater) =>
+        {
+            if (currentKeyboardState.IsKeyDown(key) && !previousKeyboardState.IsKeyDown(key))
+            {
+                rTater.SetDestinationAngle(angle);
+            }
+
+            if (currentKeyboardState.IsKeyUp(key) && !previousKeyboardState.IsKeyUp(key))
+            {
+                rTater.StopRotation();
+            }
+        };
+        private Action<Keys,Keys, float, float, float, KeyboardState, KeyboardState, Rotator> keysPressed = (key, key2, angle, firstAngle, secondAngle, currentKeyboardState, previousKeyboardState, rTater) =>
+        {
+            if (currentKeyboardState.IsKeyDown(key) && currentKeyboardState.IsKeyDown(key2))
+            {
+                rTater.SetDestinationAngle(angle);
+            }
+            
+            if (currentKeyboardState.IsKeyUp(key) && !previousKeyboardState.IsKeyUp(key) && (currentKeyboardState.IsKeyDown(key2)))
+            {
+                rTater.SetDestinationAngle(secondAngle);
+            }
+
+            if (currentKeyboardState.IsKeyUp(key2) && !previousKeyboardState.IsKeyUp(key2) && (currentKeyboardState.IsKeyDown(key)))
+            {
+                rTater.SetDestinationAngle(firstAngle);
+            }
+        };
 
         public PlayerContainer(SpriteBatch spriteBatch,Texture2D atlas, Character gameChar, Rotator rTater, Dictionary<KeyMapping, Keys> keyMap, Point startPosition)
         {
@@ -45,11 +81,6 @@ namespace GameLibrary.Player
                 { keyMap[KeyMapping.Right], (c,p) => keyPressed(keyMap[KeyMapping.Right], 90f, c,p, this.rTater) }
             };
         }
-
-        private readonly Dictionary<KeyMapping, Keys> keyMap;
-        private Point _currentPosition;
-        public Point CurrentPosition => this._currentPosition;
-      
 
         public void Update(GameTime time, KeyboardState keystate, GamePadState padState)
         {
@@ -115,39 +146,6 @@ namespace GameLibrary.Player
             }
         }
 
-        private Action<Keys, float, KeyboardState, KeyboardState, Rotator> keyPressed = (key, angle, currentKeyboardState, previousKeyboardState, rTater) =>
-        {
-            if (currentKeyboardState.IsKeyDown(key) && !previousKeyboardState.IsKeyDown(key))
-            {
-                rTater.SetDestinationAngle(angle);
-            }
-
-            if (currentKeyboardState.IsKeyUp(key) && !previousKeyboardState.IsKeyUp(key))
-            {
-                rTater.StopRotation();
-            }
-        };
-
-        private Action<Keys,Keys, float, float, float, KeyboardState, KeyboardState, Rotator> keysPressed = (key, key2, angle, firstAngle, secondAngle, currentKeyboardState, previousKeyboardState, rTater) =>
-        {
-            if (currentKeyboardState.IsKeyDown(key) && currentKeyboardState.IsKeyDown(key2))
-            {
-                rTater.SetDestinationAngle(angle);
-            }
-            
-            if (currentKeyboardState.IsKeyUp(key) && !previousKeyboardState.IsKeyUp(key) && (currentKeyboardState.IsKeyDown(key2)))
-            {
-                rTater.SetDestinationAngle(secondAngle);
-            }
-
-            if (currentKeyboardState.IsKeyUp(key2) && !previousKeyboardState.IsKeyUp(key2) && (currentKeyboardState.IsKeyDown(key)))
-            {
-                rTater.SetDestinationAngle(firstAngle);
-            }
-        };
-        private KeyboardState currentKeyboardState;
-        private Dictionary<Keys, Action<KeyboardState, KeyboardState>> KeyboardActions;
-
         private void InputProcessor(KeyboardState currentKeyboardState, GamePadState padState)
         {
             //if(this.KeyboardActions.ContainsKey(currentKeyboardState.)
@@ -162,7 +160,6 @@ namespace GameLibrary.Player
             }
 
         }
-
 
         private void InputUpdate(KeyboardState currentKeyboardState, GamePadState padState)
         {

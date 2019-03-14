@@ -72,32 +72,6 @@ namespace MonoGameTests
             // TODO: Unload any non ContentManager content here
         }
 
-        private void UpdateTheLine(KeyboardState kState)
-        {
-
-            Action<Keys, float> keyPressed = (key, angle) =>
-            {
-                if (kState.IsKeyDown(key) && !previousKeyState.IsKeyDown(key))
-                {
-                    this.rTater.SetDestinationAngle(angle);
-                }
-
-                if (kState.IsKeyUp(key) && !previousKeyState.IsKeyUp(key))
-                {
-                    this.rTater.StopRotation();
-                }
-
-            };
-
-            keyPressed(Keys.D, 90f);
-            keyPressed(Keys.W, 0f);
-            keyPressed(Keys.S, 180f);
-            keyPressed(Keys.A, 270f);
-
-
-            this.previousKeyState = kState;
-        }
-
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
