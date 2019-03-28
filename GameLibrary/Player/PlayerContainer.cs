@@ -26,15 +26,16 @@ namespace GameLibrary.Player
 
         private float currentAngle; // Cheaper to compare/calculate this per update than the direction vector
 
-        private Vector2 directioNormal; // Where we are pointing in space. Apply force to this to move.
+        private Vector2 directionNormal; // Where we are pointing in space. Apply force to this to move.
 
         public SpriteBatch _spriteBatch { get; }
         public Texture2D Atlas { get; }
         public Character playerCharacter { get; }
         internal Rotator Rotatation { get; }
 
-        private Point _currentPosition;
-        public Point CurrentPosition => this._currentPosition;
+        private Vector2 _currentPosition;
+        private float _velocity = 0f;
+        public Vector2 CurrentPosition => this._currentPosition;
 
         public PlayerContainer(SpriteBatch spriteBatch, Texture2D atlas, Character gameChar, Rotator rTater, Dictionary<KeyMapping, Keys> keyMap, Point startPosition)
         {
@@ -43,26 +44,26 @@ namespace GameLibrary.Player
             playerCharacter = gameChar;
             this.Rotatation = rTater;
             this.keyMap = keyMap;
-            _currentPosition = startPosition;
+            _currentPosition = startPosition.ToVector2();
 
             ConfigureMovementKeyMappings(keyMap);
             pressedKeys = new HashSet<Keys>();
             this.currentAngle = rTater.DestinationAngle; // The vehicle turns but the movement does not.
-            directioNormal = GeneralExtensions.AngledVectorFromDegrees(rTater.DestinationAngle);
+            directionNormal = GeneralExtensions.AngledVectorFromDegrees(rTater.DestinationAngle);
         }
 
         private void ConfigureMovementKeyMappings(Dictionary<KeyMapping, Keys> keyMap)
         {
             this.MovementActions = new Dictionary<IEnumerable<Keys>, Action>
             {
-                { new[] { this.keyMap[KeyMapping.Up], this.keyMap[KeyMapping.Right] },()=> this.Rotatation.SetDestinationAngle(45f)},
-                { new[] { this.keyMap[KeyMapping.Up], this.keyMap[KeyMapping.Left] },()=> this.Rotatation.SetDestinationAngle(315f)},
-                { new[] { this.keyMap[KeyMapping.Down], this.keyMap[KeyMapping.Right] },()=> this.Rotatation.SetDestinationAngle(135f)},
-                { new[] { this.keyMap[KeyMapping.Down], this.keyMap[KeyMapping.Left] },()=> this.Rotatation.SetDestinationAngle(225f)},
-                { new[] { this.keyMap[KeyMapping.Left] },()=> this.Rotatation.SetDestinationAngle(270f)},
-                { new[] { this.keyMap[KeyMapping.Right] },()=> this.Rotatation.SetDestinationAngle(90f)},
-                { new[] { this.keyMap[KeyMapping.Up] },()=> this.Rotatation.SetDestinationAngle(0f)},
-                { new[] { this.keyMap[KeyMapping.Down] },()=> this.Rotatation.SetDestinationAngle(180f)},
+                { new[] { this.keyMap[KeyMapping.Up], this.keyMap[KeyMapping.Right] },()=> {this.Rotatation.SetDestinationAngle(45f); this.EnableVelocity(); } },
+                { new[] { this.keyMap[KeyMapping.Up], this.keyMap[KeyMapping.Left] },()=> {this.Rotatation.SetDestinationAngle(315f); this.EnableVelocity(); }},
+                { new[] { this.keyMap[KeyMapping.Down], this.keyMap[KeyMapping.Right] },()=> {this.Rotatation.SetDestinationAngle(135f); this.EnableVelocity(); }},
+                { new[] { this.keyMap[KeyMapping.Down], this.keyMap[KeyMapping.Left] },()=> {this.Rotatation.SetDestinationAngle(225f); this.EnableVelocity(); }},
+                { new[] { this.keyMap[KeyMapping.Left] },()=> {this.Rotatation.SetDestinationAngle(270f); this.EnableVelocity(); }},
+                { new[] { this.keyMap[KeyMapping.Right] },()=> {this.Rotatation.SetDestinationAngle(90f); this.EnableVelocity(); }},
+                { new[] { this.keyMap[KeyMapping.Up] },()=> {this.Rotatation.SetDestinationAngle(0f); this.EnableVelocity(); }},
+                { new[] { this.keyMap[KeyMapping.Down] },()=> {this.Rotatation.SetDestinationAngle(180f); this.EnableVelocity(); }},
             };
         }
 
@@ -81,7 +82,7 @@ namespace GameLibrary.Player
             // Make sure the movement diretion is correct
             if (Rotatation.State != RotatorState.Stopped && this.currentAngle != this.Rotatation.DestinationAngle)
             {
-                this.directioNormal = GeneralExtensions.AngledVectorFromDegrees(Rotatation.DestinationAngle);
+                this.directionNormal = GeneralExtensions.RotateVector(Rotatation.DestinationAngle);
                 this.currentAngle = this.Rotatation.DestinationAngle;
             }
 
@@ -89,11 +90,19 @@ namespace GameLibrary.Player
             // Mange the current state
             playerCharacterCurrentAnimState(this.Rotatation.CurrentAngle);
             // set the character state
-
             this.playerCharacter.Update(delta);
+            this.UpdatePosition(delta);
             // MIsc
             this.previousPadState = currentPadState;
             this.previousKeyboardState = currentKeyboardState;
+        }
+
+        private void UpdatePosition(float delta)
+        {
+            if (_velocity != 0f)
+            {
+                this._currentPosition += directionNormal * _velocity* delta;
+            }
         }
 
         private void playerCharacterCurrentAnimState(float currentAngle)
@@ -157,12 +166,19 @@ namespace GameLibrary.Player
 
             // no movement keys are being pressed.
             if (!keysActivated)
+            {
                 Rotatation.StopRotation();
+                DisableVelocity();
+            }
         }
+
+        private void EnableVelocity() => this._velocity = 32f;
+
+        private void DisableVelocity() => this._velocity = 0f;
 
         public void Draw()
         {
-            _spriteBatch.Draw(this.Atlas, CurrentPosition.ToVector2(), null, this.playerCharacter.CurrentDisplayFrame, Vector2.Zero, 0f, new Vector2(0.25f, 0.25f));
+            _spriteBatch.Draw(this.Atlas, CurrentPosition, null, this.playerCharacter.CurrentDisplayFrame, Vector2.Zero, 0f, new Vector2(0.25f, 0.25f));
         }
     }
 
