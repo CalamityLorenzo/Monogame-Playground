@@ -28,6 +28,7 @@ namespace GameLibrary
                     oldKeys.Add(pressedKey);
                 }
             }
+            // remove newly lifted keys
             pressedKeysState.RemoveWhere(k => oldKeys.Any(ok => ok == k));
             return pressedKeysState;
         }

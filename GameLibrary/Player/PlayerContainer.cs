@@ -18,17 +18,20 @@ namespace GameLibrary.Player
 
         private readonly Dictionary<KeyMapping, Keys> keyMap;
         private Dictionary<IEnumerable<Keys>, Action> MovementActions;
-
-
         private IEnumerable<Keys> pressedKeys;
 
         private KeyboardState currentKeyboardState;
         private KeyboardState previousKeyboardState;
         private GamePadState previousPadState;
+
+        private float currentAngle; // Cheaper to compare/calculate this per update than the direction vector
+
+        private Vector2 directioNormal; // Where we are pointing in space. Apply force to this to move.
+
         public SpriteBatch _spriteBatch { get; }
         public Texture2D Atlas { get; }
         public Character playerCharacter { get; }
-        public Rotator rTater { get; }
+        internal Rotator Rotatation { get; }
 
         private Point _currentPosition;
         public Point CurrentPosition => this._currentPosition;
@@ -38,26 +41,28 @@ namespace GameLibrary.Player
             _spriteBatch = spriteBatch;
             Atlas = atlas;
             playerCharacter = gameChar;
-            this.rTater = rTater;
+            this.Rotatation = rTater;
             this.keyMap = keyMap;
             _currentPosition = startPosition;
 
             ConfigureMovementKeyMappings(keyMap);
             pressedKeys = new HashSet<Keys>();
+            this.currentAngle = rTater.DestinationAngle; // The vehicle turns but the movement does not.
+            directioNormal = GeneralExtensions.AngledVectorFromDegrees(rTater.DestinationAngle);
         }
 
         private void ConfigureMovementKeyMappings(Dictionary<KeyMapping, Keys> keyMap)
         {
             this.MovementActions = new Dictionary<IEnumerable<Keys>, Action>
             {
-                { new[] { this.keyMap[KeyMapping.Up], this.keyMap[KeyMapping.Right] },()=> this.rTater.SetDestinationAngle(45f)},
-                { new[] { this.keyMap[KeyMapping.Up], this.keyMap[KeyMapping.Left] },()=> this.rTater.SetDestinationAngle(315f)},
-                { new[] { this.keyMap[KeyMapping.Down], this.keyMap[KeyMapping.Right] },()=> this.rTater.SetDestinationAngle(135f)},
-                { new[] { this.keyMap[KeyMapping.Down], this.keyMap[KeyMapping.Left] },()=> this.rTater.SetDestinationAngle(225f)},
-                { new[] { this.keyMap[KeyMapping.Left] },()=> this.rTater.SetDestinationAngle(270f)},
-                { new[] { this.keyMap[KeyMapping.Right] },()=> this.rTater.SetDestinationAngle(90f)},
-                { new[] { this.keyMap[KeyMapping.Up] },()=> this.rTater.SetDestinationAngle(0f)},
-                { new[] { this.keyMap[KeyMapping.Down] },()=> this.rTater.SetDestinationAngle(180f)},
+                { new[] { this.keyMap[KeyMapping.Up], this.keyMap[KeyMapping.Right] },()=> this.Rotatation.SetDestinationAngle(45f)},
+                { new[] { this.keyMap[KeyMapping.Up], this.keyMap[KeyMapping.Left] },()=> this.Rotatation.SetDestinationAngle(315f)},
+                { new[] { this.keyMap[KeyMapping.Down], this.keyMap[KeyMapping.Right] },()=> this.Rotatation.SetDestinationAngle(135f)},
+                { new[] { this.keyMap[KeyMapping.Down], this.keyMap[KeyMapping.Left] },()=> this.Rotatation.SetDestinationAngle(225f)},
+                { new[] { this.keyMap[KeyMapping.Left] },()=> this.Rotatation.SetDestinationAngle(270f)},
+                { new[] { this.keyMap[KeyMapping.Right] },()=> this.Rotatation.SetDestinationAngle(90f)},
+                { new[] { this.keyMap[KeyMapping.Up] },()=> this.Rotatation.SetDestinationAngle(0f)},
+                { new[] { this.keyMap[KeyMapping.Down] },()=> this.Rotatation.SetDestinationAngle(180f)},
             };
         }
 
@@ -71,9 +76,18 @@ namespace GameLibrary.Player
             //InputProcessor();
             MovementKeyUpdate(pressedKeys);
             // Set the angle
-            this.rTater.Update(delta);
+            this.Rotatation.Update(delta);
+
+            // Make sure the movement diretion is correct
+            if (Rotatation.State != RotatorState.Stopped && this.currentAngle != this.Rotatation.DestinationAngle)
+            {
+                this.directioNormal = GeneralExtensions.AngledVectorFromDegrees(Rotatation.DestinationAngle);
+                this.currentAngle = this.Rotatation.DestinationAngle;
+            }
+
+
             // Mange the current state
-            playerCharacterCurrentAnimState(this.rTater.CurrentAngle);
+            playerCharacterCurrentAnimState(this.Rotatation.CurrentAngle);
             // set the character state
 
             this.playerCharacter.Update(delta);
@@ -143,7 +157,7 @@ namespace GameLibrary.Player
 
             // no movement keys are being pressed.
             if (!keysActivated)
-                rTater.StopRotation();
+                Rotatation.StopRotation();
         }
 
         public void Draw()

@@ -29,19 +29,19 @@ namespace GameLibrary.Extensions
         {
             var texture = SpriteBatchExtensions.GetOnePixelTexture(@this.GraphicsDevice);
 
-            // our unit vector as a reference 
-            // length/Magnitude should be constant
-            var unitV = new Vector2(0, length);
-            var theta = (double)MathHelper.ToRadians(angleInDegrees);
-            var cs = Math.Cos(theta);
-            var sn = Math.Sin(theta);
-            // WE are calculating the end point of a line.
-            // This result will be added to the start position.
-            var endX = (unitV.X * cs) - (unitV.Y * sn);
-            var endY = (unitV.X * sn) - (unitV.Y * cs);
-
+            //// our unit vector as a reference 
+            //// length/Magnitude should be constant
+            //var unitV = new Vector2(0, length);
+            //var theta = (double)MathHelper.ToRadians(angleInDegrees);
+            //var cs = Math.Cos(theta);
+            //var sn = Math.Sin(theta);
+            //// WE are calculating the end point of a line.
+            //// This result will be added to the start position.
+            //var endX = (unitV.X * cs) - (unitV.Y * sn);
+            //var endY = (unitV.X * sn) - (unitV.Y * cs);
+          var endVector = GeneralExtensions.AngledVectorFromDegrees(angleInDegrees, length);
             // negation of x was ngation of y not sure why it works.
-            var endPoint = start + new Vector2((float)Math.Floor(-endX), (float)endY);
+            var endPoint = start + endVector;
             // create the list of points
             var lineData = Bresenham.GetLine(start.ToPoint(), endPoint.ToPoint());
 
