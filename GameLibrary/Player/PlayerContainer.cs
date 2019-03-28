@@ -82,7 +82,7 @@ namespace GameLibrary.Player
             // Make sure the movement diretion is correct
             if (Rotatation.State != RotatorState.Stopped && this.currentAngle != this.Rotatation.DestinationAngle)
             {
-                this.directionNormal = GeneralExtensions.RotateVector(Rotatation.DestinationAngle);
+                this.directionNormal = GeneralExtensions.UnitAngleVector(Rotatation.DestinationAngle);
                 this.currentAngle = this.Rotatation.DestinationAngle;
             }
 
@@ -172,7 +172,7 @@ namespace GameLibrary.Player
             }
         }
 
-        private void EnableVelocity() => this._velocity = 32f;
+        private void EnableVelocity() => this._velocity = 34f;
 
         private void DisableVelocity() => this._velocity = 0f;
 
