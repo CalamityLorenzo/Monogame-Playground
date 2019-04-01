@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace GameLibrary.Player
 {
@@ -16,12 +15,11 @@ namespace GameLibrary.Player
     public class PlayerContainer : IGameContainerDrawing
     {
 
-        private readonly Dictionary<KeyMapping, Keys> keyMap;
-        private Dictionary<IEnumerable<Keys>, Action> MovementActions;
-        private IEnumerable<Keys> pressedKeys;
+        private readonly Dictionary<ControlMapping, Keys> keyMap;
 
-        private KeyboardState currentKeyboardState;
-        private KeyboardState previousKeyboardState;
+        private GameLibrary.PlayerThings.KeyboardManager keyboardManager = new KeyboardManager();
+        //private KeyboardState currentKeyboardState;
+        //private KeyboardState previousKeyboardState;
         private GamePadState previousPadState;
 
         private float currentAngle; // Cheaper to compare/calculate this per update than the direction vector
@@ -37,7 +35,7 @@ namespace GameLibrary.Player
         private float _velocity = 0f;
         public Vector2 CurrentPosition => this._currentPosition;
 
-        public PlayerContainer(SpriteBatch spriteBatch, Texture2D atlas, Character gameChar, Rotator rTater, Dictionary<KeyMapping, Keys> keyMap, Point startPosition)
+        public PlayerContainer(SpriteBatch spriteBatch, Texture2D atlas, Character gameChar, Rotator rTater, Dictionary<ControlMapping, Keys> keyMap, Point startPosition)
         {
             _spriteBatch = spriteBatch;
             Atlas = atlas;
@@ -46,46 +44,41 @@ namespace GameLibrary.Player
             this.keyMap = keyMap;
             _currentPosition = startPosition.ToVector2();
 
-            ConfigureMovementKeyMappings(keyMap);
-            pressedKeys = new HashSet<Keys>();
+            ConfigureKeyManager(keyMap);
             this.currentAngle = rTater.DestinationAngle; // The vehicle turns but the movement does not.
             directionNormal = GeneralExtensions.AngledVectorFromDegrees(rTater.DestinationAngle);
         }
 
-        private void ConfigureMovementKeyMappings(Dictionary<KeyMapping, Keys> keyMap)
+        private void ConfigureKeyManager(Dictionary<ControlMapping, Keys> keyMap)
         {
-            this.MovementActions = new Dictionary<IEnumerable<Keys>, Action>
+            keyboardManager.AddMovingActions(new Dictionary<IEnumerable<Keys>, Action>
             {
-                { new[] { this.keyMap[KeyMapping.Up], this.keyMap[KeyMapping.Right] },()=> {this.Rotatation.SetDestinationAngle(45f); this.EnableVelocity(); } },
-                { new[] { this.keyMap[KeyMapping.Up], this.keyMap[KeyMapping.Left] },()=> {this.Rotatation.SetDestinationAngle(315f); this.EnableVelocity(); }},
-                { new[] { this.keyMap[KeyMapping.Down], this.keyMap[KeyMapping.Right] },()=> {this.Rotatation.SetDestinationAngle(135f); this.EnableVelocity(); }},
-                { new[] { this.keyMap[KeyMapping.Down], this.keyMap[KeyMapping.Left] },()=> {this.Rotatation.SetDestinationAngle(225f); this.EnableVelocity(); }},
-                { new[] { this.keyMap[KeyMapping.Left] },()=> {this.Rotatation.SetDestinationAngle(270f); this.EnableVelocity(); }},
-                { new[] { this.keyMap[KeyMapping.Right] },()=> {this.Rotatation.SetDestinationAngle(90f); this.EnableVelocity(); }},
-                { new[] { this.keyMap[KeyMapping.Up] },()=> {this.Rotatation.SetDestinationAngle(0f); this.EnableVelocity(); }},
-                { new[] { this.keyMap[KeyMapping.Down] },()=> {this.Rotatation.SetDestinationAngle(180f); this.EnableVelocity(); }},
-            };
+                { new[] { this.keyMap[ControlMapping.Up], this.keyMap[ControlMapping.Right] },()=> {this.Rotatation.SetDestinationAngle(45f); this.EnableVelocity(); } },
+                { new[] { this.keyMap[ControlMapping.Up], this.keyMap[ControlMapping.Left] },()=> {this.Rotatation.SetDestinationAngle(315f); this.EnableVelocity(); }},
+                { new[] { this.keyMap[ControlMapping.Down], this.keyMap[ControlMapping.Right] },()=> {this.Rotatation.SetDestinationAngle(135f); this.EnableVelocity(); }},
+                { new[] { this.keyMap[ControlMapping.Down], this.keyMap[ControlMapping.Left] },()=> {this.Rotatation.SetDestinationAngle(225f); this.EnableVelocity(); }},
+                { new[] { this.keyMap[ControlMapping.Left] },()=> {this.Rotatation.SetDestinationAngle(270f); this.EnableVelocity(); }},
+                { new[] { this.keyMap[ControlMapping.Right] },()=> {this.Rotatation.SetDestinationAngle(90f); this.EnableVelocity(); }},
+                { new[] { this.keyMap[ControlMapping.Up] },()=> {this.Rotatation.SetDestinationAngle(0f); this.EnableVelocity(); }},
+                { new[] { this.keyMap[ControlMapping.Down] },()=> {this.Rotatation.SetDestinationAngle(180f); this.EnableVelocity(); }},
+            }, () => {this.Rotatation.StopRotation(); this.DisableVelocity(); });
+
         }
 
         public void Update(GameTime time, KeyboardState keystate, GamePadState padState)
         {
             var delta = (float)time.ElapsedGameTime.TotalSeconds;
-            this.currentKeyboardState = keystate;
             var currentPadState = padState;
             // manage the angle
-            this.pressedKeys = KeyboardFunctions.CurrentPressedKeys(pressedKeys, currentKeyboardState, previousKeyboardState);
-            //InputProcessor();
-            MovementKeyUpdate(pressedKeys);
-            // Set the angle
             this.Rotatation.Update(delta);
-
+            keyboardManager.Update(delta, keystate);
+            
             // Make sure the movement diretion is correct
             if (Rotatation.State != RotatorState.Stopped && this.currentAngle != this.Rotatation.DestinationAngle)
             {
                 this.directionNormal = GeneralExtensions.RotateVector(Rotatation.DestinationAngle);
                 this.currentAngle = this.Rotatation.DestinationAngle;
             }
-
 
             // Mange the current state
             playerCharacterCurrentAnimState(this.Rotatation.CurrentAngle);
@@ -94,14 +87,13 @@ namespace GameLibrary.Player
             this.UpdatePosition(delta);
             // MIsc
             this.previousPadState = currentPadState;
-            this.previousKeyboardState = currentKeyboardState;
         }
 
         private void UpdatePosition(float delta)
         {
-            if (_velocity != 0f)
+            if (_velocity > 0f)
             {
-                this._currentPosition += directionNormal * _velocity* delta;
+                this._currentPosition += directionNormal * _velocity * delta;
             }
         }
 
@@ -150,29 +142,7 @@ namespace GameLibrary.Player
             }
         }
 
-        private void MovementKeyUpdate(IEnumerable<Keys> availableKeys)
-        {
-            var keysActivated = false;
-            // this hadles movement and direection
-            foreach (var keyBox in MovementActions)
-            {
-                if (keyBox.Key.All(o => availableKeys.Contains(o)))
-                {
-                    keyBox.Value();
-                    keysActivated = true;
-                    break;
-                }
-            }
-
-            // no movement keys are being pressed.
-            if (!keysActivated)
-            {
-                Rotatation.StopRotation();
-                DisableVelocity();
-            }
-        }
-
-        private void EnableVelocity() => this._velocity = 32f;
+        private void EnableVelocity() => this._velocity = 44f;
 
         private void DisableVelocity() => this._velocity = 0f;
 

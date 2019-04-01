@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameLibrary.PlayerThings
 {
-    public enum KeyMapping
+    public enum ControlMapping
     {
         Unknown = 0,
         Up,

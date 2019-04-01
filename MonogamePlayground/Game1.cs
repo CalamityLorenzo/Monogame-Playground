@@ -10,7 +10,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using Texture2D = Microsoft.Xna.Framework.Graphics.Texture2D;
 
 namespace MonoGameTests
 {
@@ -26,7 +25,7 @@ namespace MonoGameTests
         ConfigurationData configData;
         PlayerContainer player;
         Microsoft.Xna.Framework.Graphics.Texture2D baseJeep;
-        Dictionary<KeyMapping, Keys> player1Keys;
+        Dictionary<ControlMapping, Keys> player1Keys;
         public KeyboardState previousKeyState { get; private set; }
 
         public Game1()
@@ -43,7 +42,7 @@ namespace MonoGameTests
 
             var player1Dictionary = configData.ToResultType<Dictionary<string, string>>("Player1Controls");
             var player2Dictionary = configData.ToResultType<Dictionary<string, string>>("Player2Controls");
-            player1Keys = GeneralExtensions.ConvertToKeySet<KeyMapping>(player1Dictionary);
+            player1Keys = GeneralExtensions.ConvertToKeySet<ControlMapping>(player1Dictionary);
         }
 
 
@@ -61,7 +60,7 @@ namespace MonoGameTests
             // TODO: use this.Content to load your game content here
             arial = this.Content.Load<SpriteFont>("Arial");
 
-            this.rTater = new Rotator(348, 180);
+            this.rTater = new Rotator(348, 202);
             baseJeep = Texture2d.FromFileName(this.GraphicsDevice, "Content/Jeep.png");
             var jeepFrames = FramesGenerator.GenerateFrames(new FrameInfo(243, 243), new Point(baseJeep.Width, baseJeep.Height));
             player = new PlayerContainer(this.spriteBatch, this.baseJeep, new Character(jeepFrames), this.rTater, player1Keys, new Point(100, 125));
