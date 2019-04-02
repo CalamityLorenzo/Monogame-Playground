@@ -18,8 +18,6 @@ namespace GameLibrary.Player
         private readonly Dictionary<ControlMapping, Keys> keyMap;
 
         private GameLibrary.PlayerThings.KeyboardManager keyboardManager = new KeyboardManager();
-        //private KeyboardState currentKeyboardState;
-        //private KeyboardState previousKeyboardState;
         private GamePadState previousPadState;
 
         private float currentAngle; // Cheaper to compare/calculate this per update than the direction vector
