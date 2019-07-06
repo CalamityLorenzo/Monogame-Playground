@@ -16,11 +16,13 @@ namespace GameLibrary.Player
     {
 
         private readonly Dictionary<ControlMapping, Keys> keyMap;
+        private Dictionary<IEnumerable<Keys>, Action> MovementActions;
+        private IEnumerable<Keys> pressedKeys;
 
         private GameLibrary.PlayerThings.KeyboardManager keyboardManager = new KeyboardManager();
         private GamePadState previousPadState;
 
-        private float currentAngle; // Cheaper to compare/calculate this per update than the direction vector
+        private float velocityAngle; // Cheaper to compare/calculate this per update than the direction vector (Velocity angle means when we accelerate, whats the direction we don't follw the rotation jibber)
 
         private Vector2 directionNormal; // Where we are pointing in space. Apply force to this to move.
 
@@ -72,9 +74,9 @@ namespace GameLibrary.Player
             keyboardManager.Update(delta, keystate);
             
             // Make sure the movement diretion is correct
-            if (Rotatation.State != RotatorState.Stopped && this.currentAngle != this.Rotatation.DestinationAngle)
+            if (Rotatation.State != RotatorState.Stopped && this.velocityAngle != this.Rotatation.DestinationAngle)
             {
-                this.directionNormal = GeneralExtensions.RotateVector(Rotatation.DestinationAngle);
+                this.directionNormal = GeneralExtensions.UnitAngleVector(Rotatation.DestinationAngle);
                 this.currentAngle = this.Rotatation.DestinationAngle;
             }
 
