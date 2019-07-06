@@ -9,9 +9,9 @@ namespace GameLibrary
 {
     public static class KeyboardFunctions
     {
-        public static IEnumerable<Keys> CurrentPressedKeys(IEnumerable<Keys> CurrentPressedKeys, KeyboardState currentState, KeyboardState previousState)
+        public static IEnumerable<Keys> CurrentPressedKeys(IEnumerable<Keys> previousPressedKeys, KeyboardState currentState, KeyboardState previousState)
         {
-            HashSet<Keys> pressedKeysState = new HashSet<Keys>(CurrentPressedKeys);
+            HashSet<Keys> pressedKeysState = new HashSet<Keys>(previousPressedKeys);
             var appKeys = currentState.GetPressedKeys();
             // add newly pressed keys
             foreach (var key in appKeys)
