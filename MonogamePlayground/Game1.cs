@@ -99,8 +99,8 @@ namespace MonoGameTests
 
             player.Draw();
 
-            this.spriteBatch.DrawString(this.arial, Math.Floor(this.rTater.CurrentAngle).ToString(), new Vector2(10, 10), Color.DarkGreen);
-            this.spriteBatch.DrawLine(new Vector2(75, 80), 50, this.rTater.CurrentAngle, Color.White);
+          //  this.spriteBatch.DrawString(this.arial, Math.Floor(this.rTater.CurrentAngle).ToString(), new Vector2(10, 10), Color.DarkGreen);
+            //this.spriteBatch.DrawLine(new Vector2(75, 80), 50, this.rTater.CurrentAngle, Color.White);
             this.spriteBatch.End();
 
 

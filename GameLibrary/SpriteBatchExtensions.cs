@@ -24,6 +24,14 @@ namespace GameLibrary.Extensions
             return OnePixel.Value;
         }
 
+        public static void DrawFilledRect(this SpriteBatch @this, Vector2 start, int width, int height, Color Colour)
+        {
+            var texture = SpriteBatchExtensions.GetOnePixelTexture(@this.GraphicsDevice);
+
+            @this.Draw(texture, new Rectangle(start.ToPoint(), new Point(width, height)), Colour);
+
+        }
+
         // simple drawing of 1 pixel line using bresnenhams
         public static void DrawLine(this SpriteBatch @this, Vector2 start, int length, float angleInDegrees, Color Colour)
         {

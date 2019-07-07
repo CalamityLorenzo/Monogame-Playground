@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.438
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29006.145
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonogamePlayground", "MonogamePlayground\MonogamePlayground.csproj", "{2119E0F4-4846-4C0E-A3F1-4232F2A4B835}"
 EndProject
@@ -11,9 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Framework.Windows"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLibrary", "GameLibrary\GameLibrary.csproj", "{46CFEA54-2F20-4BCA-B217-EA14874CC69F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OutsideTheframe", "OutsideTheframe\OutsideTheframe.csproj", "{4F7B2B06-8EB3-480A-894F-C7B80036C714}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLibrary.Config", "GameLibrary.Config\GameLibrary.Config.csproj", "{3AAE98F2-2384-426D-A20D-605B549A1F83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parrallax.Eightway", "Parrallax.Eightway\Parrallax.Eightway.csproj", "{EA131140-0B1F-46A3-A590-2C7D994BC335}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,14 +46,6 @@ Global
 		{46CFEA54-2F20-4BCA-B217-EA14874CC69F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{46CFEA54-2F20-4BCA-B217-EA14874CC69F}.Release|x86.ActiveCfg = Release|Any CPU
 		{46CFEA54-2F20-4BCA-B217-EA14874CC69F}.Release|x86.Build.0 = Release|Any CPU
-		{4F7B2B06-8EB3-480A-894F-C7B80036C714}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4F7B2B06-8EB3-480A-894F-C7B80036C714}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4F7B2B06-8EB3-480A-894F-C7B80036C714}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{4F7B2B06-8EB3-480A-894F-C7B80036C714}.Debug|x86.Build.0 = Debug|Any CPU
-		{4F7B2B06-8EB3-480A-894F-C7B80036C714}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4F7B2B06-8EB3-480A-894F-C7B80036C714}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4F7B2B06-8EB3-480A-894F-C7B80036C714}.Release|x86.ActiveCfg = Release|Any CPU
-		{4F7B2B06-8EB3-480A-894F-C7B80036C714}.Release|x86.Build.0 = Release|Any CPU
 		{3AAE98F2-2384-426D-A20D-605B549A1F83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3AAE98F2-2384-426D-A20D-605B549A1F83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AAE98F2-2384-426D-A20D-605B549A1F83}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -62,6 +54,14 @@ Global
 		{3AAE98F2-2384-426D-A20D-605B549A1F83}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3AAE98F2-2384-426D-A20D-605B549A1F83}.Release|x86.ActiveCfg = Release|Any CPU
 		{3AAE98F2-2384-426D-A20D-605B549A1F83}.Release|x86.Build.0 = Release|Any CPU
+		{EA131140-0B1F-46A3-A590-2C7D994BC335}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA131140-0B1F-46A3-A590-2C7D994BC335}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA131140-0B1F-46A3-A590-2C7D994BC335}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EA131140-0B1F-46A3-A590-2C7D994BC335}.Debug|x86.Build.0 = Debug|Any CPU
+		{EA131140-0B1F-46A3-A590-2C7D994BC335}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA131140-0B1F-46A3-A590-2C7D994BC335}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA131140-0B1F-46A3-A590-2C7D994BC335}.Release|x86.ActiveCfg = Release|Any CPU
+		{EA131140-0B1F-46A3-A590-2C7D994BC335}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

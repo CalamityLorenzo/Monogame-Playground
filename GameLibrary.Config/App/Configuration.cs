@@ -31,7 +31,7 @@ namespace GameLibrary.Config.App
     }
     public class Configuration
     {
-        private static Lazy<Configuration> configInstance = new Lazy<Configuration>(()=>new Configuration());
+        private static Lazy<Configuration> configInstance = new Lazy<Configuration>(() => new Configuration());
         private Configuration() { }
         private bool BuildComplete = false;
         public static Configuration Manager => configInstance.Value;
@@ -45,24 +45,16 @@ namespace GameLibrary.Config.App
             return this;
         }
 
+
         public ConfigurationData Build()
         {
-            foreach (var fileName in fileNames)
+            if (!BuildComplete)
             {
-                using (var reader = new StreamReader(fileName))
-                {
-                    var jsonOptions = reader.ReadToEnd();
-                    LoadedData.Add(JObject.Parse(jsonOptions));
-                    //var GameOptions = LoadGameOptions("Options", allOpts);
-                    //var playerOneControls = LoadPlayerControls("Player1Controls", allOpts);
-                    //var playerTwoControls = LoadPlayerControls("Player2Controls", allOpts);
-                    //this.PlayerOneControls = PlayerOneControls;
-                    //this.PlayerTwoControls = PlayerTwoControls;
-                    //this.GameOptions = GameOptions;
-                }
+                LoadedData.AddRange(fileNames.Select(fn => JObject.Parse(File.ReadAllText(fn))));
+                BuildComplete = true;
+                return new ConfigurationData(LoadedData);
             }
-            BuildComplete = true;
-            return new ConfigurationData(LoadedData);
+            throw new ArgumentOutOfRangeException("Build has already been completed.");
         }
 
     }

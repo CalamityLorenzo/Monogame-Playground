@@ -38,11 +38,28 @@ namespace GameLibrary
             var theta = (double)MathHelper.ToRadians(angleInDegrees);
             var cs = Math.Cos(theta);
             var sn = Math.Sin(theta);
-            
+
             var endX = (float)(cs * unitV.X - sn * unitV.Y); // unitV.X * sn - unitV.Y * cs;
             var endY = (float)(sn * unitV.X + cs * unitV.Y);
             //return new Vector2((float)ca * unitV.X - (float)sa * unitV.Y, (float)sa * unitV.X + (float)ca * unitV.Y);
             return new Vector2(endX, endY);
+        }
+
+        public static Vector2 AddX(this Vector2 @this, int X)
+        {
+            return new Vector2(@this.X + X, @this.Y);
+        }
+        public static Vector2 AddY(this Vector2 @this, int Y)
+        {
+            return new Vector2(@this.X, @this.Y + Y);
+        }
+        public static Vector2 AddX(this Vector2 @this, float X)
+        {
+            return new Vector2(@this.X + X, @this.Y);
+        }
+        public static Vector2 AddY(this Vector2 @this, float Y)
+        {
+            return new Vector2(@this.X, @this.Y + Y);
         }
     }
 }
