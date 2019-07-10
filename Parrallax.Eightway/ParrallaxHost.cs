@@ -19,6 +19,7 @@ namespace Parrallax.Eightway
         Rotator rotator;
         private KeyboardRotation _keyboardRotator;
         private ConfigurationData configData;
+        private BackgroundLayer _foregroundLayter;
         private Vector2 centrePoint;
         public ParrallaxHost()
         {
@@ -48,9 +49,13 @@ namespace Parrallax.Eightway
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
             var player1Dictionary = configData.ToResultType<Dictionary<string, string>>("Player1Controls");
-
             var player1Keys = GeneralExtensions.ConvertToKeySet<ControlMapping>(player1Dictionary);
-            centrePoint = new Point(this.GraphicsDevice.Viewport.Width / 2, this.GraphicsDevice.Viewport.Height / 2).ToVector2();
+            var gameWidth = this.GraphicsDevice.Viewport.Width / 2;
+            var gameHEight =this.GraphicsDevice.Viewport.Height / 2;
+            var background1 = spriteBatch.CreateFilleRectTexture( new Rectangle(0,0, gameWidth + 50, gameHEight + 50), Color.LightCyan);
+            var background2 = spriteBatch.CreateFilleRectTexture(new Rectangle(0, 0, gameWidth + 50, gameHEight + 50), Color.Orange);
+            this._foregroundLayter = new BackgroundLayer(spriteBatch, new Texture2D[] { background2, background1 }, rotator, 40,0.5, new Vector2(100,100));
+            centrePoint = new Point(gameWidth, gameHEight).ToVector2();
             this._keyboardRotator = new KeyboardRotation(this.rotator,player1Keys);
             base.Initialize();
         }
@@ -62,6 +67,7 @@ namespace Parrallax.Eightway
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || kState.IsKeyDown(Keys.Escape))
                 Exit();
 
+            _foregroundLayter.Update(gameTime);
             _keyboardRotator.Update(gameTime, kState, GamePadState.Default);
             rotator.Update(delta);
 
@@ -71,9 +77,13 @@ namespace Parrallax.Eightway
         {
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
+
+            _foregroundLayter.Draw();
+
             // We've divided the screen top and main
             spriteBatch.DrawFilledRect(new Vector2(0, 0), GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height/10, Color.White);
             spriteBatch.DrawString(arial, Math.Floor(this.rotator.CurrentAngle).ToString(), new Vector2(10, 10), Color.Plum);
+
 
             // not an effective way of doing this.
             spriteBatch.DrawLine(centrePoint.AddX(1), 99, this.rotator.CurrentAngle, Color.White);

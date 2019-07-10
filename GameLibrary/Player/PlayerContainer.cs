@@ -74,7 +74,7 @@ namespace GameLibrary.Player
             // Make sure the movement diretion is correct
             if (Rotatation.State != RotatorState.Stopped && this.currentAngle != this.Rotatation.DestinationAngle)
             {
-                this.directionNormal = GeneralExtensions.UnitAngleVector    (Rotatation.DestinationAngle);
+                this.directionNormal = GeneralExtensions.UnitAngleVector(Rotatation.DestinationAngle);
                 this.currentAngle = this.Rotatation.DestinationAngle;
             }
 
