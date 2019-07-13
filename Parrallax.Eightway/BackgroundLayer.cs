@@ -31,7 +31,7 @@ namespace Parrallax.Eightway
             this.currentRotation = roation;
             this._velocity = velocity;
             // Where we start in relation to our frames. so 0,0 means the top left of the first texture is at 0,0on the screen,
-            // 50,50 would be :put texture starting at 50,50 at 0,0,
+            // 50,50 would be :put texture starting at 50,50 at 0,0 on the screen,
             // ie whats' the starting co-ordinate for the top-left of the screen.
             this._currentPosition = startOffset; 
             this._drawRange = spriteBatch.GraphicsDevice.Viewport.Bounds;
@@ -45,9 +45,30 @@ namespace Parrallax.Eightway
            var directionVector =  GeneralExtensions.UnitAngleVector(90);
             // now updated our start position (Where on the textture we are drawing ) to pass to the rectangle
             this._currentPosition += directionVector * _velocity * delta;
-            
 
-        }   
+            // Make sure we are in the bounds of the width of the background.
+            // if it is > that width or > height reset back to 0 plus the amount of difference.
+            // In this case I have an array 2 wide 1 high
+
+            var totalWidth = frameDimensions.X * images.Length;
+            var totalHeight = frameDimensions.Y;
+
+            if(_currentPosition.X> totalWidth)
+            {
+                _currentPosition = new Vector2(_currentPosition.X - totalWidth, _currentPosition.Y);
+            }
+
+            if (_currentPosition.Y>totalHeight)
+            {
+                _currentPosition = new Vector2(_currentPosition.X, _currentPosition.Y- totalHeight);
+            }
+
+            // Okay now find the area we are mapping.
+            // Take the _currentPosition, and find where it in the array.
+
+
+
+        }
 
         public void Draw()
         {
