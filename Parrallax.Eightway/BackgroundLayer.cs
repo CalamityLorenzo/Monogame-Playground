@@ -85,7 +85,6 @@ namespace Parrallax.Eightway
                 // Create Rectangle
                 var x = frameDimensions.X - _destinationCursor.X;
                 var y = frameDimensions.Y - _destination.Y; // Total height of frame - target to get Y Position.
-
                 var sourceWidth = _destination.Width >= images[imageId].Width - x ? images[imageId].Width - x : _destination.Width;
                 var sourceHeight = _destination.Height >= images[imageId].Height - y ? images[imageId].Height - y : _destination.Height;
 
@@ -94,8 +93,8 @@ namespace Parrallax.Eightway
                 if (x + sourceWidth >= _destination.Width && x + sourceHeight >= _destination.Height)
                     sourceRectsComplete = true;
                 if (!sourceRectsComplete)
-                    _destinationCursor = new Vector2(_destinationCursor.X + sourceWidth, _destinationCursor.Y + sourceHeight);
-
+                    _destinationCursor = new Point(_destinationCursor.X + sourceWidth, _destinationCursor.Y + sourceHeight);
+                _sourceRects.Append(rectSection);
 
             }
 
