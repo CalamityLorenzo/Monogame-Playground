@@ -22,13 +22,14 @@ namespace Parrallax.Eightway
         private Vector2 _oldPosition;
         private readonly Rectangle _drawRange;
         private Rectangle _destination; // The area we draw too. (Should effectively be the viewingport)
-        private readonly Rectangle _sourceArea;
+        private Rectangle[] _sourceRects = new Rectangle[4];
 
         public BackgroundLayer(SpriteBatch spriteBatch, Texture2D[] images, Rotator roation, int velocity, double velocityFactor, Vector2 startOffset)
         {
             this.spriteBatch = spriteBatch;
             this.images = images;
-            frameDimensions = images.Length > 0 ? new Point(images[0].Width, images[0].Height) : Point.Zero;
+            // The area we have to update each iteration.
+            frameDimensions = images.Length > 0 ? new Point(images[0].Width * images.Length, images[0].Height * images.Length) : Point.Zero;
             this.currentRotation = roation;
             this._velocity = velocity;
             // Where we start in relation to our frames. so 0,0 means the top left of the first texture is at 0,0on the screen,
@@ -45,9 +46,9 @@ namespace Parrallax.Eightway
             // elasped since last update.
             var delta = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             // calculate drawing start vector
-            var directionVector = GeneralExtensions.UnitAngleVector(90);
-            // now updated our start position (Where on the textture we are drawing ) to pass to the rectangle
-            this._currentPosition += directionVector * _velocity * delta;
+            //var directionVector = GeneralExtensions.UnitAngleVector(180);
+            //// now updated our start position (Where on the textture we are drawing ) to pass to the rectangle
+            //this._currentPosition += directionVector * _velocity * delta;
 
             if (_currentPosition.X != this._oldPosition.X || _currentPosition.Y != this._oldPosition.Y)
             {
@@ -55,8 +56,23 @@ namespace Parrallax.Eightway
                 // if it is > that width or > height reset back to 0 plus the amount of difference.
                 // In this case I have an array 2 wide 1 high
 
-                var totalWidth = images[0].Width;
-                var totalHeight = images[0].Height;
+                // can have upto 4 tins being drawn on screen at once. 
+                // The idea is : We have a certain amount of sceen to fill (width x height)
+                // using the power of maths we will ensure the whole screen is filled.
+                // each pass through the loop will add an entry to our _sourceRects 
+                // we will zero out any we don't use.
+
+                var totalWidth = frameDimensions.X;
+                var totalHeight = frameDimensions.Y;
+                var displayRectsBuilt = false;
+
+                int  selectedX =0, selectedY = 0;
+                
+
+                while(!displayRectsBuilt)
+                {
+
+                }
 
                 if (_currentPosition.X > totalWidth)
                 {
@@ -67,6 +83,16 @@ namespace Parrallax.Eightway
                 {
                     _currentPosition = new Vector2(_currentPosition.X, _currentPosition.Y - totalHeight);
                 }
+                // Obviously can't be less than 0
+                if (_currentPosition.X < 0)
+                {
+                    _currentPosition = new Vector2(totalWidth + _currentPosition.X, _currentPosition.Y);
+                }
+
+                if (_currentPosition.Y < 0)
+                {
+                    _currentPosition = new Vector2(_currentPosition.X, totalHeight + _currentPosition.Y);
+                }
 
                 // Okay now find the area we are mapping.
                 // Take the _currentPosition, and find where it in the array.
@@ -76,15 +102,20 @@ namespace Parrallax.Eightway
                 // if the length of x draws over the edge, scale it back to what we can draw
                 float drawWidth = (_currentPosition.X + this._drawRange.Width) > totalWidth ? totalWidth - _currentPosition.X : _currentPosition.X + this._drawRange.Width;
                 float drawHeight = (_currentPosition.Y + this._drawRange.Height) > totalHeight ? totalHeight - _currentPosition.Y : _currentPosition.Y + this._drawRange.Height;
-                this._destination = new Rectangle(_currentPosition.ToPoint(), new Point((int)drawWidth, (int)drawHeight));
+                //  this._destination = new Rectangle(_currentPosition.ToPoint(), new Point((int)drawWidth, (int)drawHeight));
+                this._sourceRects[0] = new Rectangle((int)_currentPosition.X, (int)_currentPosition.Y, (int)drawWidth, (int)drawHeight);
+
+                this._oldPosition = _currentPosition;
             }
         }
 
         public void Draw()
         {
             // we draw a section of our "canvas" that is currently drawable.
-            var source = new Rectangle(1000, 0, 50, 90);
-            spriteBatch.Draw(images[0], _destination, source, Color.White);
+            var (x, y) = (50, 50);
+
+            var source = new Rectangle(50, 50, images[0].Width - x, images[0].Height - y);
+            spriteBatch.Draw(images[0], Vector2.Zero, null, Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.0f);
         }
     }
 }
