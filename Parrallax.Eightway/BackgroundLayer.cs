@@ -18,7 +18,7 @@ namespace Parrallax.Eightway
         private Point frameDimensions;
         private Rotator currentRotation;
         private readonly int _velocity;
-        private Vector2 _currentPosition;
+        private Vector2 _destinationViewPosition;
         private readonly Rectangle _drawRange;
         private readonly Rectangle _destination; // The area we draw too. (Should effectively be the viewingport)
         private readonly Rectangle _sourceArea;
@@ -33,7 +33,7 @@ namespace Parrallax.Eightway
             // Where we start in relation to our frames. so 0,0 means the top left of the first texture is at 0,0on the screen,
             // 50,50 would be :put texture starting at 50,50 at 0,0 on the screen,
             // ie whats' the starting co-ordinate for the top-left of the screen.
-            this._currentPosition = startOffset; 
+            this._destinationViewPosition = startOffset; 
             this._drawRange = spriteBatch.GraphicsDevice.Viewport.Bounds;
             _destination = new Rectangle(0, 0, _drawRange.Width, _drawRange.Height);
         }
@@ -43,29 +43,60 @@ namespace Parrallax.Eightway
             var delta = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             // calculate drawing start vector
            var directionVector =  GeneralExtensions.UnitAngleVector(90);
-            // now updated our start position (Where on the textture we are drawing ) to pass to the rectangle
-            this._currentPosition += directionVector * _velocity * delta;
 
-            // Make sure we are in the bounds of the width of the background.
+            // Our screen is a window
+            // This is where the window top left points in relation to our background.
+            this._destinationViewPosition += directionVector * _velocity * delta;
+
+            // Make sure we are in the bounds of the width of the background itself. 
             // if it is > that width or > height reset back to 0 plus the amount of difference.
             // In this case I have an array 2 wide 1 high
 
             var totalWidth = frameDimensions.X * images.Length;
             var totalHeight = frameDimensions.Y;
-
-            if(_currentPosition.X> totalWidth)
+            // Stay in back ground frame;
+            if(_destinationViewPosition.X> totalWidth)
             {
-                _currentPosition = new Vector2(_currentPosition.X - totalWidth, _currentPosition.Y);
+                _destinationViewPosition = new Vector2(_destinationViewPosition.X - totalWidth, _destinationViewPosition.Y);
             }
 
-            if (_currentPosition.Y>totalHeight)
+            if (_destinationViewPosition.Y>totalHeight)
             {
-                _currentPosition = new Vector2(_currentPosition.X, _currentPosition.Y- totalHeight);
+                _destinationViewPosition = new Vector2(_destinationViewPosition.X, _destinationViewPosition.Y- totalHeight);
             }
 
-            // Okay now find the area we are mapping.
-            // Take the _currentPosition, and find where it in the array.
+            // Now we take it down to the background image level
+            // we know where on the background we are drawing (as if it were one contiguouis object)
+            // now we need to know 1. Which image in the array 2. Where we start.
+            // we need to fill up the destination rectangle
+            // but we may have to draw 1,2 or 4 rectangles to achieve this.
+            var sourceRectsComplete= false;
+            var _sourceRects = new Rectangle[4];
 
+            // we move along this iterator
+            var _destinationCursor = _destinationViewPosition.ToPoint();
+
+            while (!sourceRectsComplete)
+            {
+                // f.x == width 
+                var imageId = (_destinationCursor.X / frameDimensions.X);
+
+                // Create Rectangle
+                var x = frameDimensions.X - _destinationCursor.X;
+                var y = frameDimensions.Y - _destination.Y; // Total height of frame - target to get Y Position.
+                
+                var sourceWidth = _destination.Width >= images[imageId].Width - x ? images[imageId].Width - x : _destination.Width;
+                var sourceHeight = _destination.Height >= images[imageId].Height - y ? images[imageId].Height - y : _destination.Height;
+
+                var rectSection = new Rectangle(x,y, sourceWidth ,sourceHeight);
+
+                if (x + sourceWidth >= _destination.Width && x + sourceHeight >= _destination.Height)
+                    sourceRectsComplete = true;
+                if (!sourceRectsComplete)
+                    _destinationCursor = new Vector2(_destinationCursor.X + sourceWidth, _destinationCursor.Y + sourceHeight);
+
+
+            }
 
 
         }
