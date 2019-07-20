@@ -69,6 +69,7 @@ namespace Parrallax.Eightway
 
             _foregroundLayter.Update(gameTime);
             _keyboardRotator.Update(gameTime, kState, GamePadState.Default);
+           
             rotator.Update(delta);
 
         }

@@ -20,7 +20,7 @@ namespace Parrallax.Eightway
         private readonly int _velocity;
         private Vector2 _destinationViewPosition;
         private readonly Rectangle _drawRange;
-        private readonly Rectangle _destination; // The area we draw too. (Should effectively be the viewingport)
+        private Rectangle _destination; // The area we draw too. (Should effectively be the viewingport)
         private readonly Rectangle _sourceArea;
 
         public BackgroundLayer(SpriteBatch spriteBatch, Texture2D[] images, Rotator roation, int velocity, double velocityFactor, Vector2 startOffset)
@@ -95,10 +95,17 @@ namespace Parrallax.Eightway
                 if (!sourceRectsComplete)
                     _destinationCursor = new Vector2(_destinationCursor.X + sourceWidth, _destinationCursor.Y + sourceHeight);
 
+            // Okay now find the area we are mapping.
+            // Take the _currentPosition, and find where it in the array.
 
             }
 
 
+                // if the length of x draws over the edge, scale it back to what we can draw
+                float drawWidth = (_currentPosition.X + this._drawRange.Width) > totalWidth ? totalWidth - _currentPosition.X : _currentPosition.X + this._drawRange.Width;
+                float drawHeight = (_currentPosition.Y + this._drawRange.Height) > totalHeight ? totalHeight - _currentPosition.Y : _currentPosition.Y + this._drawRange.Height;
+                this._destination = new Rectangle(_currentPosition.ToPoint(), new Point((int)drawWidth, (int)drawHeight));
+            }
         }
 
         public void Draw()
