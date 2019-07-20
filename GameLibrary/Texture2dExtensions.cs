@@ -18,11 +18,6 @@ namespace GameLibrary.Extensions
             fileStream.Dispose();
             return newTexture;
         }
-
-        public static Texture2D TextureFromFileName(this GraphicsDevice graphicsDevice, string fileName)
-        {
-            return FromFileName(graphicsDevice, fileName);   
-        }
     }
 
 
