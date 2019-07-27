@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GameLibrary.AppObjects;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,11 @@ namespace GameLibrary
         public static Dictionary<T, Keys> ConvertToKeySet<T>(Dictionary<string, string> keymappings) where T : struct, IConvertible
         {
             return keymappings.ToDictionary(kvp => (T)Enum.Parse(typeof(T), kvp.Key), kvp => (Keys)Enum.Parse(typeof(Keys), kvp.Value));
+        }
+
+        public static Dimensions ToDimensions(this Rectangle @this)
+        {
+            return new Dimensions(@this.Width, @this.Height);
         }
 
         public static Vector2 AngledVectorFromDegrees(float angleInDegrees, int length = 1)
