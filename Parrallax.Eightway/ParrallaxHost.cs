@@ -28,7 +28,7 @@ namespace Parrallax.Eightway
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = 600;
             graphics.PreferredBackBufferHeight = 600;
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
             Content.RootDirectory = "Content";
 
         }
@@ -56,8 +56,8 @@ namespace Parrallax.Eightway
             var gameHEight =this.GraphicsDevice.Viewport.Height / 2;
             var background1 = this.GraphicsDevice.TextureFromFileName("Content/backBackground.png");// spriteBatch.CreateFilleRectTexture( new Rectangle(0,0, gameWidth + 50, gameHEight + 50), Color.LightCyan);
             var background2 = this.GraphicsDevice.TextureFromFileName("Content/frontBackground.png");  //spriteBatch.CreateFilleRectTexture(new Rectangle(0, 0, gameWidth + 50, gameHEight + 50), Color.Orange);
-            this._foregroundLayter = new BackgroundLayer(spriteBatch, new Texture2D[] { background2, background1 }, rotator, 0.35f,0.5f, new Vector2(93,434));
-            this._foregroundLayter2 = new BackgroundLayer(spriteBatch, new Texture2D[] { background1, background1}, rotator, 0.40f, 0.05f, new Vector2(93, 434));
+            this._foregroundLayter = new BackgroundLayer(spriteBatch, new Texture2D[] { background2, background2 }, rotator, 0.35f,0.5f, new Vector2(134,131));
+            this._foregroundLayter2 = new BackgroundLayer(spriteBatch, new Texture2D[] { background1, background1}, rotator, 0.25f, 0.05f, new Vector2(134, 131));
 
             centrePoint = new Point(gameWidth, gameHEight).ToVector2();
             this._keyboardRotator = new KeyboardRotation(this.rotator,player1Keys);
@@ -84,8 +84,8 @@ namespace Parrallax.Eightway
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
 
-            _foregroundLayter.Draw();
             _foregroundLayter2.Draw();
+            _foregroundLayter.Draw();
             // We've divided the screen top and main
             //spriteBatch.DrawFilledRect(new Vector2(0, 0), GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height/10, Color.White);
             spriteBatch.DrawString(arial, Math.Floor(this.rotator.CurrentAngle).ToString(), new Vector2(10, 10), Color.Plum);

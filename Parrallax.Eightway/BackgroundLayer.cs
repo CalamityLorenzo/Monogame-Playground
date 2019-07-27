@@ -76,7 +76,6 @@ namespace Parrallax.Eightway
                 var backgroundCursor = _currentPosition.ToPoint();
                 var destinationRect = _destination;
 
-
                 // These are the recntagles required and describes all the destination rectnagles
                 var destinationRects = GetAllTheRectangles(backgroundCursor, destinationRect);
                 // now we create all the source rectangles
@@ -117,9 +116,11 @@ namespace Parrallax.Eightway
                 for (var rowX = cameraBoundaries.X; rowX + MaxWidth <= cameraBoundaries.Width;)
                 {
                     // we are in the row based on the previous.
-                    rowX = currentRect.Width;
+                    rowX += currentRect.Width;
                     // We don't updat the vertical in the row
-                    var nextRect = new Rectangle(rowX, currentRect.Y, cameraBoundaries.Width - currentRect.Width, currentRect.Height);
+                    var setWidth = cameraBoundaries.Width - currentRect.Width;
+
+                    var nextRect = new Rectangle(rowX, currentRect.Y, setWidth>=MaxWidth?MaxWidth:setWidth , currentRect.Height);
                     rects[rectCounter] = nextRect;
                     rectCounter += 1;
                     currentRect = nextRect;
@@ -133,7 +134,8 @@ namespace Parrallax.Eightway
                 {
                     // and we also need to move back to beginning
                     // and will also be the same width as the original
-                    currentRect = new Rectangle(rootRectangle.X, rootRectangle.Y + rootRectangle.Height, rootRectangle.Width, cameraBoundaries.Height - heightY);
+                    var setHeight = cameraBoundaries.Height - heightY;
+                    currentRect = new Rectangle(rootRectangle.X, rootRectangle.Y + rootRectangle.Height, rootRectangle.Width, setHeight);
                     rects[rectCounter] = currentRect;
                     rectCounter += 1;
                 }
@@ -143,10 +145,14 @@ namespace Parrallax.Eightway
 
             var displayRects = new List<DisplayRectInfo>();
 
+            int cellId = 0;
+            // need to calculate how many rows vs columns. mod is on the horizontal.
+            var modId = fullRects.Length > 1 ? fullRects.Length / 2 : 1;
             foreach (var destRect in fullRects)
             {
                 (var x, var y, var w, var h) = destRect;
-                var sourceX = x + (backgroundPosition.X - (frameDimensions.Width * imageId));
+
+                var sourceX = (x + backgroundPosition.X) - (frameDimensions.Width * cellId);
                 var sourceY = y + backgroundPosition.Y;
                 var ImageId = x / frameDimensions.Width;
 
@@ -156,6 +162,7 @@ namespace Parrallax.Eightway
                 displayRects.Add(new DisplayRectInfo(images[0], destRect, sourceRect));
 
                 // Debug.WriteLine($"{sourceRect.X} : {sourceRect.Y}");
+                cellId = (cellId + 1) % modId;
             }
             return displayRects.ToArray();
 
