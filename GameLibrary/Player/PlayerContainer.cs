@@ -14,24 +14,19 @@ namespace GameLibrary.Player
     // or something.
     public class PlayerContainer : IGameContainerDrawing
     {
-
-        private readonly Dictionary<ControlMapping, Keys> keyMap;
-
-        private GameLibrary.PlayerThings.KeyboardManager keyboardManager = new KeyboardManager();
-        private GamePadState previousPadState;
-
-        private float currentAngle; // Cheaper to compare/calculate this per update than the direction vector
-
-        private Vector2 directionNormal; // Where we are pointing in space. Apply force to this to move.
-
         public SpriteBatch _spriteBatch { get; }
         public Texture2D Atlas { get; }
         public Character playerCharacter { get; }
-        internal Rotator Rotatation { get; }
+        public Vector2 CurrentPosition => this._currentPosition;
 
+        private readonly Dictionary<ControlMapping, Keys> keyMap;
+        private GameLibrary.PlayerThings.KeyboardManager keyboardManager = new KeyboardManager();
+        private GamePadState previousPadState;
+        private float currentAngle; // Cheaper to compare/calculate this per update than the direction vector
+        private Vector2 directionNormal; // Where we are pointing in space. Apply force to this to move.
         private Vector2 _currentPosition;
         private float _velocity = 0f;
-        public Vector2 CurrentPosition => this._currentPosition;
+        internal Rotator Rotatation { get; }
 
         public PlayerContainer(SpriteBatch spriteBatch, Texture2D atlas, Character gameChar, Rotator rTater, Dictionary<ControlMapping, Keys> keyMap, Point startPosition)
         {
@@ -83,7 +78,7 @@ namespace GameLibrary.Player
             // set the character state
             this.playerCharacter.Update(delta);
             this.UpdatePosition(delta);
-            // MIsc
+            // Misc
             this.previousPadState = currentPadState;
         }
 

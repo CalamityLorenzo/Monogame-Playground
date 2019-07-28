@@ -24,7 +24,6 @@ namespace GameLibrary.PlayerThings
         // Same caveats as before.
         private Dictionary<IEnumerable<Keys>, Action> _unpressedActions;
 
-
         public KeyboardManager()
         {
             _movingActions = new Dictionary<IEnumerable<Keys>, Action>();

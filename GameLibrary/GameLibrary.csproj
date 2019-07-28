@@ -48,6 +48,7 @@
     <Compile Include="Animation\Character.cs" />
     <Compile Include="Animation\FramesGenerator.cs" />
     <Compile Include="Animation\FramesInfo.cs" />
+    <Compile Include="AppObjects\BackgroundRectanglesLayer.cs" />
     <Compile Include="AppObjects\Dimensions.cs" />
     <Compile Include="AppObjects\Rotator.cs" />
     <Compile Include="Bresenham.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Interfaces\GameDrawing.cs" />
     <Compile Include="Interfaces\GameUpdateable.cs" />
     <Compile Include="KeyboardFunctions.cs" />
+    <Compile Include="Models\DisplayRectInfo.cs" />
     <Compile Include="PlayerThings\KeyboardManager.cs" />
     <Compile Include="PlayerThings\ControlMapping.cs" />
     <Compile Include="Player\PlayerContainer.cs" />

@@ -32,6 +32,9 @@ namespace GameLibrary.Animation
     public class Character : IGameObjectUpdate
     {
         public Rectangle CurrentDisplayFrame { get; private set; }
+        public Rectangle[] DisplayFrames { get; }
+        public JeepState CurrentState { get; private set; }
+
         public Character(Rectangle[] displayFrames)
         {
             DisplayFrames = displayFrames;
@@ -39,9 +42,9 @@ namespace GameLibrary.Animation
             CurrentState = JeepState.Unknown;
         }
 
-        public Rectangle[] DisplayFrames { get; }
-        public JeepState CurrentState { get; private set; }
         private JeepState PreviousState { get; set; }
+
+
         public void Update(float mlSinceupdate)
         {
             // If we had animation then things woulf be occuring here.

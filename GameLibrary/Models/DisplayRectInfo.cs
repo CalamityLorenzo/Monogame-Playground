@@ -6,13 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Parrallax.Eightway.Model
+namespace GameLibrary.Models
 {
-    struct DisplayRectInfo
+    public struct DisplayRectInfo
     {
 
-
-        public DisplayRectInfo(Texture2D texture2D, Rectangle destination, Rectangle source ) : this()
+        public DisplayRectInfo(Texture2D texture2D, Rectangle destination, Rectangle source) : this()
         {
             this.Texture = texture2D;
             this.SourceArea = source;

@@ -1,15 +1,19 @@
-﻿using GameLibrary;
+﻿using System;
+using GameLibrary;
 using GameLibrary.AppObjects;
+using GameLibrary.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Parrallax.Eightway.Model;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Parrallax.Eightway
-{
-    // we are alwasys moving 
+namespace GameLibrary.AppObjects
+{ 
+    // background layer that is drawn using rectangles
+    // it is omni-directional and can be used with velocites.
+    // You can have multiple for the background, but only in the horizontal.
+    // It wraps around in any direction.
+    // Because of the jitter I would not use it.
     public class BackgroundRectanglesLayer
     {
         private readonly SpriteBatch spriteBatch;
