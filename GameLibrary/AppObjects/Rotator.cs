@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace GameLibrary.AppObjects
 {
-
     public enum RotatorState
     {
         Unknown = 0,
@@ -87,15 +86,12 @@ namespace GameLibrary.AppObjects
             // are we stopped or moving?
             if (this.State != RotatorState.Stopped && this.State != RotatorState.Unknown)
             {
-
                 UpdatePosition(delta);
-
                 if (IsAngleMatched(this.State, DestinationAngle, CurrentAngle, PreviousAngle))
                 {
                     this.State = RotatorState.Stopped;
                     this.CurrentAngle = DestinationAngle;
                 }
-
                 this.PreviousAngle = CurrentAngle;
             }
         }
@@ -138,12 +134,8 @@ namespace GameLibrary.AppObjects
                 lowerbound = lowerbound - 360f;
             }
             // Finally is our destination angle between the lower/upperbound
-            if (lowerbound <= destinationAngle && upperbound >= destinationAngle)
-            {
-                return true;
-            }
-            return false;
-
+            return (lowerbound <= destinationAngle && upperbound >= destinationAngle);
+            
         }
 
         private void UpdatePosition(float delta)

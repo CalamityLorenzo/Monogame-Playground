@@ -60,10 +60,8 @@ namespace Parrallax.Eightway
                 var totalHeight = frameDimensions.Height;
                 // Stay in the range of our background layer;
                 _currentPosition = EnsureBoundries(_currentPosition, totalWidth, totalHeight);
-                ;
                 // These are the recntagles required and describes all the destination rectnagles
                 var destinationRects = CreateDisplayRectangles(_currentPosition.ToPoint(), _destination);
-
                 _sourceArea = destinationRects.ToArray();
                 _previousPosition = _currentPosition;
             }
