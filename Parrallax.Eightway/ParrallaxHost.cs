@@ -19,16 +19,16 @@ namespace Parrallax.Eightway
         Rotator rotator;
         private KeyboardRotation _keyboardRotator;
         private ConfigurationData configData;
-        private BackgroundLayer _foregroundLayter;
-        private BackgroundLayer _foregroundLayter2;
+        private BackgroundRectanglesLayer _foregroundLayter;
+        private BackgroundRectanglesLayer _foregroundLayter2;
         private Vector2 centrePoint;
         public ParrallaxHost()
         {
 
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = 600;
-            graphics.PreferredBackBufferHeight = 600;
-            graphics.IsFullScreen = false;
+            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 800;
+            graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
 
         }
@@ -56,8 +56,8 @@ namespace Parrallax.Eightway
             var gameHEight =this.GraphicsDevice.Viewport.Height / 2;
             var background1 = this.GraphicsDevice.TextureFromFileName("Content/backBackground.png");// spriteBatch.CreateFilleRectTexture( new Rectangle(0,0, gameWidth + 50, gameHEight + 50), Color.LightCyan);
             var background2 = this.GraphicsDevice.TextureFromFileName("Content/frontBackground.png");  //spriteBatch.CreateFilleRectTexture(new Rectangle(0, 0, gameWidth + 50, gameHEight + 50), Color.Orange);
-            this._foregroundLayter = new BackgroundLayer(spriteBatch, new Texture2D[] { background2, background2 }, rotator, 0.35f,0.5f, new Vector2(134,131));
-            this._foregroundLayter2 = new BackgroundLayer(spriteBatch, new Texture2D[] { background1, background1}, rotator, 0.25f, 0.05f, new Vector2(134, 131));
+            this._foregroundLayter = new BackgroundRectanglesLayer(spriteBatch, new Texture2D[] { background2, background2 }, rotator, 0.35f, new Vector2(876,  486));
+            this._foregroundLayter2 = new BackgroundRectanglesLayer(spriteBatch, new Texture2D[] { background1, background1}, rotator, 0.20f,new Vector2(876,  486));
 
             centrePoint = new Point(gameWidth, gameHEight).ToVector2();
             this._keyboardRotator = new KeyboardRotation(this.rotator,player1Keys);
@@ -92,9 +92,9 @@ namespace Parrallax.Eightway
 
 
             //// not an effective way of doing this.
-            //spriteBatch.DrawLine(centrePoint.AddX(1), 99, this.rotator.CurrentAngle, Color.White);
-            //spriteBatch.DrawLine(centrePoint, 100, this.rotator.CurrentAngle, Color.White);
-            //spriteBatch.DrawLine(centrePoint.AddX(-1), 99, this.rotator.CurrentAngle, Color.White);
+            spriteBatch.DrawLine(centrePoint.AddX(1), 99, this.rotator.CurrentAngle, Color.White);
+            spriteBatch.DrawLine(centrePoint, 100, this.rotator.CurrentAngle, Color.White);
+            spriteBatch.DrawLine(centrePoint.AddX(-1), 99, this.rotator.CurrentAngle, Color.White);
 
 
             spriteBatch.End();

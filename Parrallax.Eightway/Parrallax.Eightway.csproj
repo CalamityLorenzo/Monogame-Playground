@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackgroundLayer.cs" />
+    <Compile Include="BackgroundRectanglesLayer.cs" />
     <Compile Include="KeyboardRotation.cs" />
     <Compile Include="Model\DisplayRectInfo.cs" />
     <Compile Include="ParrallaxHost.cs" />
