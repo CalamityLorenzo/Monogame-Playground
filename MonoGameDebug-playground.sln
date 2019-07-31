@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLibrary.Config", "GameL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parrallax.Eightway", "Parrallax.Eightway\Parrallax.Eightway.csproj", "{EA131140-0B1F-46A3-A590-2C7D994BC335}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FortuneTests", "FortuneTests\FortuneTests.csproj", "{626DB852-5E90-4DD4-B2A4-C97EC46D315C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,14 @@ Global
 		{EA131140-0B1F-46A3-A590-2C7D994BC335}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EA131140-0B1F-46A3-A590-2C7D994BC335}.Release|x86.ActiveCfg = Release|Any CPU
 		{EA131140-0B1F-46A3-A590-2C7D994BC335}.Release|x86.Build.0 = Release|Any CPU
+		{626DB852-5E90-4DD4-B2A4-C97EC46D315C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{626DB852-5E90-4DD4-B2A4-C97EC46D315C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{626DB852-5E90-4DD4-B2A4-C97EC46D315C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{626DB852-5E90-4DD4-B2A4-C97EC46D315C}.Debug|x86.Build.0 = Debug|Any CPU
+		{626DB852-5E90-4DD4-B2A4-C97EC46D315C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{626DB852-5E90-4DD4-B2A4-C97EC46D315C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{626DB852-5E90-4DD4-B2A4-C97EC46D315C}.Release|x86.ActiveCfg = Release|Any CPU
+		{626DB852-5E90-4DD4-B2A4-C97EC46D315C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

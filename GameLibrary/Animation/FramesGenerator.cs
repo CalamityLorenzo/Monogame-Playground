@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GameLibrary.AppObjects;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace GameLibrary.Animation
     public static class FramesGenerator
     {
         // can be irrefgular so no real rows/columns
-        public static Rectangle[] GenerateFrames(FrameInfo[] frameInfo, Point atlasSize)
+        public static Rectangle[] GenerateFrames(FrameInfo[] frameInfo, Dimensions atlasSize)
         {
             // Calculate the required frames
             if (frameInfo.Length == 1)
@@ -22,16 +23,16 @@ namespace GameLibrary.Animation
 
         // ONe frame missing any positional information
         // can do an entire spritemap.
-        public static Rectangle[] GenerateFrames(FrameInfo frameInfo, Point atlasSize)
+        public static Rectangle[] GenerateFrames(FrameInfo frameInfo, Dimensions atlasSize)
         {
             // 1 frame info for the whole set of frames.
             // cos the map is rational.
             List<Rectangle> results = new List<Rectangle>();
-            var cellsPerRow = atlasSize.X / frameInfo.Width;
-            var cellsPerColumn = atlasSize.Y / frameInfo.Height;
+            var cellsPerRow = atlasSize.Width / frameInfo.Width;
+            var cellsPerColumn = atlasSize.Height / frameInfo.Height;
 
-            var cellWidth = atlasSize.X / cellsPerRow;
-            var cellHeight = atlasSize.Y / cellsPerColumn;
+            var cellWidth = atlasSize.Width / cellsPerRow;
+            var cellHeight = atlasSize.Height / cellsPerColumn;
 
             var frameSize = new Point(frameInfo.Width, frameInfo.Height);
             // Across then down

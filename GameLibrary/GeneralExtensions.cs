@@ -67,5 +67,12 @@ namespace GameLibrary
         {
             return new Vector2(@this.X, @this.Y + Y);
         }
+
+        public static Vector2 GetMantissa(this Vector2 @this)
+        {
+            var oX = @this.X - (float)Math.Floor(@this.X);
+            var oY = @this.Y - (float)Math.Floor(@this.Y);
+            return new Vector2(oX, oY);
+        }
     }
 }

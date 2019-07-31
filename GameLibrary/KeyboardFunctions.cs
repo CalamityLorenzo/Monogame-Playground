@@ -11,6 +11,8 @@ namespace GameLibrary
     {
         public static IEnumerable<Keys> CurrentPressedKeys(IEnumerable<Keys> CurrentPressedKeys, KeyboardState currentState, KeyboardState previousState)
         {
+            if (previousState == null)
+                return new List<Keys>();
             HashSet<Keys> pressedKeysState = new HashSet<Keys>(CurrentPressedKeys);
             var appKeys = currentState.GetPressedKeys();
             // add newly pressed keys
