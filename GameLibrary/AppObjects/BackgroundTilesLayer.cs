@@ -100,7 +100,9 @@ namespace GameLibrary.AppObjects
                 for (var x = 0; x < displayColLength; x += 1)
                 {
                     var backgroundPosition = normalisedBackgroundPosition;
-                    var mapPiece = (int)((Math.Floor(backgroundPosition.Y) / tileDimensions.Height) * backgroundRowLength + ((int)Math.Floor(backgroundPosition.X) / tileDimensions.Width));
+                    var myY = (int)((Math.Floor(backgroundPosition.Y / tileDimensions.Height)) * backgroundRowLength);
+                    var myX = ((int)Math.Floor(backgroundPosition.X / tileDimensions.Width));
+                    var mapPiece = myY + myX;
                     viewPortPosition = viewPortPosition.AddX(tileDimensions.Width);
                     var screenPostion = viewPortPosition;
 
@@ -111,13 +113,13 @@ namespace GameLibrary.AppObjects
                     if (x < displayColLength)
                         normalisedBackgroundPosition = EnsureBoundries(normalisedBackgroundPosition.AddX(tileDimensions.Width), frameDimensions.Width, frameDimensions.Height);
                 }
-                Debug.WriteLine("");
+                //Debug.WriteLine("");
             }
 
             return displayInfo.ToArray();
         }
 
-        private Vector2 EnsureBoundries(Vector2 v, int totalWidth, int totalHeight)
+        private Vector2 EnsureBoundries(Vector2 v, int totalWidth, int totalHeight, int minX=0, int minY=0)
         {
             var x = v.X;
             var y = v.Y;

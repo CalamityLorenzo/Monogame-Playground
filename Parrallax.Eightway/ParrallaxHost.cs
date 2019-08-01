@@ -33,7 +33,7 @@ namespace Parrallax.Eightway
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 800;
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
 
         }
@@ -66,7 +66,7 @@ namespace Parrallax.Eightway
             // It's also the entire map for the backfround.
             var atlasRects = FramesGenerator.GenerateFrames(new FrameInfo[] { new FrameInfo(25, 25) }, new Dimensions(500, 500));
             var map = Enumerable.Range(0, atlasRects.Length ).Select(i => i).ToList();
-            this._backgroundTiles = new BackgroundTilesLayer(spriteBatch, new Texture2D[] { fastCloud, fastCloud }, atlasRects, map, rotator, 0.15f, new Vector2(0, 0));
+            this._backgroundTiles = new BackgroundTilesLayer(spriteBatch, new Texture2D[] { fastCloud, fastCloud }, atlasRects, map, rotator, 0.20f, new Vector2(0, 0));
 
 
             this._foregroundLayter = new BackgroundRectanglesLayer(spriteBatch, new Texture2D[] { fastCloud, fastCloud }, rotator, 0.35f, new Vector2(876, 486));
@@ -91,10 +91,10 @@ namespace Parrallax.Eightway
             //    _foregroundLayter.SwitchRenderer(!_foregroundLayter.UseRectangleRender);
             //    _foregroundLayter2.SwitchRenderer(!_foregroundLayter.UseRectangleRender);
             //}
-            //_foregroundLayter.Update(gameTime);
-            //_foregroundLayter2.Update(gameTime);
+            _foregroundLayter.Update(gameTime);
+            _foregroundLayter2.Update(gameTime);
 
-            _backgroundTiles.Update(gameTime);
+            //_backgroundTiles.Update(gameTime);
 
             _keyboardRotator.Update(gameTime, kState, GamePadState.Default);
 
@@ -108,10 +108,10 @@ namespace Parrallax.Eightway
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
 
-            //_foregroundLayter2.Draw();
-            //_foregroundLayter.Draw();
+            _foregroundLayter2.Draw();
+            _foregroundLayter.Draw();
 
-            _backgroundTiles.Draw();
+            //_backgroundTiles.Draw();
 
             // We've divided the screen top and main
             //spriteBatch.DrawFilledRect(new Vector2(0, 0), GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height/10, Color.White);
