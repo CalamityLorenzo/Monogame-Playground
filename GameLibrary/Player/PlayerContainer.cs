@@ -67,7 +67,7 @@ namespace GameLibrary.Player
             keyboardManager.Update(delta, keystate);
             
             // Make sure the movement diretion is correct
-            if (Rotatation.State != RotatorState.Stopped && this.currentAngle != this.Rotatation.DestinationAngle)
+            if (Rotatation.State != RotatorState.Stopped && this.velocityAngle != this.Rotatation.DestinationAngle)
             {
                 this.directionNormal = GeneralExtensions.UnitAngleVector(Rotatation.DestinationAngle);
                 this.currentAngle = this.Rotatation.DestinationAngle;
