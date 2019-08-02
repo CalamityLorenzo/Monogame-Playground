@@ -58,6 +58,7 @@
     <Compile Include="Interfaces\GameUpdateable.cs" />
     <Compile Include="KeyboardFunctions.cs" />
     <Compile Include="Models\DisplayRectInfo.cs" />
+    <Compile Include="Models\ScreenData.cs" />
     <Compile Include="PlayerThings\KeyboardManager.cs" />
     <Compile Include="PlayerThings\ControlMapping.cs" />
     <Compile Include="Player\PlayerContainer.cs" />

@@ -28,8 +28,6 @@ namespace GameLibrary.AppObjects
         private int totalHeight;
         private DisplayRectInfo[] _sourceArea;
 
-        public bool UseRectangleRender { get; private set; } = true;
-
         public BackgroundRectanglesLayer(SpriteBatch spriteBatch, Texture2D[] images, Rotator rotation, float velocity, Vector2 startOffset)
             : this(spriteBatch, images, rotation, velocity, startOffset, spriteBatch.GraphicsDevice.Viewport.Bounds)
         {
@@ -54,11 +52,6 @@ namespace GameLibrary.AppObjects
             this.totalWidth = frameDimensions.Width * images.Length;
             this.totalHeight = frameDimensions.Height;
 
-        }
-
-        public void SwitchRenderer(bool useRects)
-        {
-            this.UseRectangleRender = useRects;
         }
 
         public void Update(GameTime gameTime)
@@ -218,10 +211,8 @@ namespace GameLibrary.AppObjects
             for (var x = 0; x < _sourceArea.Length; ++x)
             {
                 var item = _sourceArea[x];
-                if (UseRectangleRender)
-                    spriteBatch.Draw(item.Texture, item.DestinationArea, item.SourceArea, Color.White);
-                else
-                    spriteBatch.Draw(item.Texture, item.DestinationStart, item.SourceArea, Color.White);
+
+                spriteBatch.Draw(item.Texture, item.DestinationStart, item.SourceArea, Color.White);
             }
         }
     }

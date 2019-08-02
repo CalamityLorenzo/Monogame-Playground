@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace Parrallax.Eightway
 {
-    internal class ParrallaxHost : Game
+    internal class MapsHost : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -22,13 +22,10 @@ namespace Parrallax.Eightway
         Rotator rotator;
         private KeyboardRotation _keyboardRotator;
         private ConfigurationData configData;
-        private BackgroundTilesLayer _backgroundTiles;
-        private BackgroundRectanglesLayer _foregroundLayter;
-        private BackgroundRectanglesLayer _foregroundLayter2;
         private Vector2 _centrePoint;
         private KeyboardState pKState;
 
-        public ParrallaxHost(ConfigurationData configData)
+        public MapsHost(ConfigurationData configData)
         {
             this.configData = configData;
             Content.RootDirectory = "Content";
@@ -57,11 +54,6 @@ namespace Parrallax.Eightway
             // Assign the drawerer
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            var centreHoriz = this.GraphicsDevice.Viewport.Width / 2;
-            var centreVert = this.GraphicsDevice.Viewport.Height / 2;
-            // create the integral to convert to float/
-            _centrePoint = new Point(centreHoriz, centreVert).ToVector2();
-
             // Can rotate
             this.rotator = new Rotator(0, 202);
             // Allows you to rotate.
@@ -74,9 +66,6 @@ namespace Parrallax.Eightway
             // It's also the entire map for the backfround.
             var atlasRects = FramesGenerator.GenerateFrames(new FrameInfo[] { new FrameInfo(25, 25) }, new Dimensions(500, 500));
             var map = Enumerable.Range(0, atlasRects.Length).Select(i => i).ToList();
-            this._backgroundTiles = new BackgroundTilesLayer(spriteBatch, new Texture2D[] { fastCloud, fastCloud }, atlasRects, map, rotator, 0.20f, new Vector2(0, 0));
-            this._foregroundLayter = new BackgroundRectanglesLayer(spriteBatch, new Texture2D[] { fastCloud, fastCloud }, rotator, 0.35f, new Vector2(876, 486));
-            this._foregroundLayter2 = new BackgroundRectanglesLayer(spriteBatch, new Texture2D[] { slowCloud, slowCloud }, rotator, 0.20f, new Vector2(876, 486));
 
             base.Initialize();
         }
@@ -94,9 +83,6 @@ namespace Parrallax.Eightway
             rotator.Update(delta);
             _keyboardRotator.Update(gameTime, kState, GamePadState.Default);
 
-            _foregroundLayter.Update(gameTime);
-            _foregroundLayter2.Update(gameTime);
-
 
             pKState = kState;
         }
@@ -106,20 +92,9 @@ namespace Parrallax.Eightway
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
 
-            _foregroundLayter2.Draw();
-            _foregroundLayter.Draw();
-
-            //_backgroundTiles.Draw();
-
             // We've divided the screen top and main
             //spriteBatch.DrawFilledRect(new Vector2(0, 0), GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height/10, Color.White);
             spriteBatch.DrawString(arial, Math.Floor(this.rotator.CurrentAngle).ToString(), new Vector2(10, 10), Color.Plum);
-
-
-            //// not an effective way of doing this.
-            spriteBatch.DrawLine(_centrePoint.AddX(1), 99, this.rotator.CurrentAngle, Color.White);
-            spriteBatch.DrawLine(_centrePoint, 100, this.rotator.CurrentAngle, Color.White);
-            spriteBatch.DrawLine(_centrePoint.AddX(-1), 99, this.rotator.CurrentAngle, Color.White);
 
 
             spriteBatch.End();

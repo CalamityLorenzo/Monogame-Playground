@@ -42,14 +42,10 @@ namespace Parrallax.Eightway
                 { new[] {  keyMap[ControlMapping.Up],  keyMap[ControlMapping.Right] },()=> { rotator.SetDestinationAngle(45f);  } },
                 { new[] {  keyMap[ControlMapping.Up],  keyMap[ControlMapping.Left] },()=> { rotator.SetDestinationAngle(315f);  }},
                 { new[] {  keyMap[ControlMapping.Down],  keyMap[ControlMapping.Right] },()=> { rotator.SetDestinationAngle(135f);  }},
-                { new[] {  keyMap[ControlMapping.Down],  keyMap[ControlMapping.Left] },
-                    ()=> { rotator.SetDestinationAngle(225f);  }},
-                { new[] {  keyMap[ControlMapping.Left] },()=> {
-                    rotator.SetDestinationAngle(270f);  }},
-                { new[] {  keyMap[ControlMapping.Right] },()=> {
-                    rotator.SetDestinationAngle(90f);  }},
-                { new[] {  keyMap[ControlMapping.Up] },()=> {
-                    rotator.SetDestinationAngle(0f);  }},
+                { new[] {  keyMap[ControlMapping.Down],  keyMap[ControlMapping.Left] }, ()=> { rotator.SetDestinationAngle(225f);  }},
+                { new[] {  keyMap[ControlMapping.Left] },()=> { rotator.SetDestinationAngle(270f);  }},
+                { new[] {  keyMap[ControlMapping.Right] },()=> {rotator.SetDestinationAngle(90f);  }},
+                { new[] {  keyMap[ControlMapping.Up] },()=> {rotator.SetDestinationAngle(0f);  }},
                 { new[] {  keyMap[ControlMapping.Down] },()=> { rotator.SetDestinationAngle(180f);  }},
             }, () => rotator.StopRotation());
         }
