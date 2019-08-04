@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,12 @@ namespace GameLibrary
         public static Dimensions ToDimensions(this Rectangle @this)
         {
             return new Dimensions(@this.Width, @this.Height);
+        }
+
+        public static List<int> LoadCsvMapData(string fileName)
+        {
+            var map = File.ReadAllLines(fileName).ToList();
+            return map.SelectMany(r => r.Split(',').Select(s=>String.IsNullOrEmpty(s)?-1:int.Parse(s)).ToList()).ToList();
         }
 
         public static Vector2 AngledVectorFromDegrees(float angleInDegrees, int length = 1)

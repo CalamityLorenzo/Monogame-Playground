@@ -47,7 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="KeyboardRotation.cs" />
+    <Compile Include="AppObjects\Keyboard4Way.cs" />
+    <Compile Include="AppObjects\KeyboardRotation.cs" />
+    <Compile Include="BoundedBackground.cs" />
     <Compile Include="MapsHost.cs" />
     <Compile Include="ParrallaxHost.cs" />
     <Compile Include="Program.cs" />
@@ -66,7 +68,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <MonoGameContentReference Include="Content\Content.mgcb" />
-    <None Include="Maps\BorderMap.csv" />
+    <None Include="Maps\BorderMap.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="opts.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

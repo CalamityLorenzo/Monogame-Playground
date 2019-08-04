@@ -1,7 +1,7 @@
 {
   "ScreenOptions": {
-    "ScreenWidth": 768,
-    "ScreenHeight": 1024,
+    "ScreenWidth": 1024,
+    "ScreenHeight": 768,
     "FullScreen": false
   },
   "Player1Controls": {

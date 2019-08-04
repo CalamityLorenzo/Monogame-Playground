@@ -19,11 +19,11 @@ namespace Parrallax.Eightway
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont arial;
-        Rotator rotator;
-        private KeyboardRotation _keyboardRotator;
+        FourWayDirection fourway;
+        private Keyboard4Way _keyboard4Way;
         private ConfigurationData configData;
-        private Vector2 _centrePoint;
         private KeyboardState pKState;
+        private BoundedBackground backgroundMap;
 
         public MapsHost(ConfigurationData configData)
         {
@@ -55,17 +55,19 @@ namespace Parrallax.Eightway
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // Can rotate
-            this.rotator = new Rotator(0, 202);
+            this.fourway = new FourWayDirection (FourDirections.Stopped, 0.40f);
             // Allows you to rotate.
-            this._keyboardRotator = new KeyboardRotation(this.rotator, player1Keys);
+            this._keyboard4Way = new Keyboard4Way(this.fourway, player1Keys);
 
             var slowCloud = this.GraphicsDevice.TextureFromFileName("Content/backBackground.png");// spriteBatch.CreateFilleRectTexture( new Rectangle(0,0, gameWidth + 50, gameHEight + 50), Color.LightCyan);
             var fastCloud = this.GraphicsDevice.TextureFromFileName("Content/frontBackground.png");  //spriteBatch.CreateFilleRectTexture(new Rectangle(0, 0, gameWidth + 50, gameHEight + 50), Color.Orange);
-
+            var sprite = this.GraphicsDevice.TextureFromFileName("Content/FatBlock.png");
             // all rects on a particular atlas.
             // It's also the entire map for the backfround.
-            var atlasRects = FramesGenerator.GenerateFrames(new FrameInfo[] { new FrameInfo(25, 25) }, new Dimensions(500, 500));
-            var map = Enumerable.Range(0, atlasRects.Length).Select(i => i).ToList();
+            var atlasRects = FramesGenerator.GenerateFrames(new FrameInfo[] { new FrameInfo(32, 32) }, new Dimensions(96, 64));
+            var map = GeneralExtensions.LoadCsvMapData("Maps/BorderMap.csv");
+            var topLeft = new Vector2(-123, -127);
+            backgroundMap = new BoundedBackground(spriteBatch, sprite, atlasRects, map, new Dimensions(32, 32), new Rectangle(0,0, 1024,1152), fourway, topLeft, GraphicsDevice.Viewport);
 
             base.Initialize();
         }
@@ -79,10 +81,9 @@ namespace Parrallax.Eightway
 
             var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
             var keys = KeyboardFunctions.CurrentPressedKeys(kState.GetPressedKeys(), kState, pKState);
-
-            rotator.Update(delta);
-            _keyboardRotator.Update(gameTime, kState, GamePadState.Default);
-
+            this._keyboard4Way.Update(gameTime, kState, new GamePadState());
+            this.fourway.Update(delta);
+            backgroundMap.Update(gameTime);
 
             pKState = kState;
         }
@@ -94,8 +95,7 @@ namespace Parrallax.Eightway
 
             // We've divided the screen top and main
             //spriteBatch.DrawFilledRect(new Vector2(0, 0), GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height/10, Color.White);
-            spriteBatch.DrawString(arial, Math.Floor(this.rotator.CurrentAngle).ToString(), new Vector2(10, 10), Color.Plum);
-
+            backgroundMap.Draw();
 
             spriteBatch.End();
 
