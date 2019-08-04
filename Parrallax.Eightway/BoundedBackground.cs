@@ -101,7 +101,7 @@ namespace Parrallax.Eightway
                             {
                                 displayRects.Add(new DisplayRectInfo(sprite, Rectangle.Empty,
                                                 this.atlasRects[displayRectIndex]
-                                                , Vector2.Add(new Vector2(x - moduloX, y - moduloY), mantissa)));
+                                                , Vector2.Subtract(new Vector2(x - moduloX, y - moduloY), mantissa)));
                             }
                         }
                     }
