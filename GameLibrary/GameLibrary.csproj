@@ -64,6 +64,7 @@
     <Compile Include="PlayerThings\KeyboardManager.cs" />
     <Compile Include="PlayerThings\ControlMapping.cs" />
     <Compile Include="Player\PlayerContainer.cs" />
+    <Compile Include="PointExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpriteBatchExtensions.cs" />
     <Compile Include="Texture2dExtensions.cs" />

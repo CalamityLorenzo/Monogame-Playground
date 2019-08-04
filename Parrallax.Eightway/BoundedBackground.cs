@@ -75,7 +75,8 @@ namespace Parrallax.Eightway
             var integralPos = Vector2.Subtract(backgroundTopLeft, mantissa);
             var moduloX = integralPos.X % tileDimensions.Width;
             var moduloY = integralPos.Y % tileDimensions.Height;
-            var normalised = Vector2.Subtract(integralPos, new Vector2(moduloX, moduloY));
+            // removed t
+            var normalised = Vector2.Subtract(integralPos, new Vector2(moduloX, moduloY)).ToPoint();
             for (var y = 0; y < viewport.Height; y += tileDimensions.Height)
             {
                 var bgNormRow = normalised.AddY(y);
@@ -83,10 +84,10 @@ namespace Parrallax.Eightway
                 {
                     var bgNormCols = bgNormRow.AddX(x);
                     // 0 and above we are in the map!
-                    if (bgNormCols.X >= 0)
+                    if (bgNormCols.X > -1)
                     {
-                        var mapIndexX = (int)Math.Floor(bgNormCols.X) / tileDimensions.Width;
-                        var mapIndexY = (int)Math.Floor(bgNormCols.Y) / tileDimensions.Height;
+                        var mapIndexX = bgNormCols.X / tileDimensions.Width;
+                        var mapIndexY = bgNormCols.Y / tileDimensions.Height;
 
                         if (mapIndexX > (mapCols - 1) || mapIndexY > (mapRows - 1))
                             break;
