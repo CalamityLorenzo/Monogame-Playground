@@ -99,7 +99,7 @@ namespace GameLibrary.AppObjects
             var sourceWidth = tSwidth >= MaxWidth ? MaxWidth : tSwidth;
             var sourceHeight = tsHeight >= MaxHeight ? MaxHeight : tsHeight;
 
-            var vectorOffset = new Vector2(currentPosition.X - (float)Math.Floor(currentPosition.X), currentPosition.Y - (float)Math.Floor(currentPosition.Y));
+            var vectorOffset = currentPosition.GetMantissa();//  new Vector2(currentPosition.X - (float)Math.Floor(currentPosition.X), currentPosition.Y - (float)Math.Floor(currentPosition.Y));
 
             var rootRectangle = new BaseRectInfo(new Rectangle(cameraBoundaries.X, cameraBoundaries.Y, sourceWidth, sourceHeight), vectorOffset);
             var currentRect = rootRectangle;
@@ -120,7 +120,7 @@ namespace GameLibrary.AppObjects
                     var currentMaxWidth = cameraBoundaries.Width - rowX;
                     var nextRect = new BaseRectInfo(
                             new Rectangle(rowX, currentRect.DestinationArea.Y, setWidth >= MaxWidth ? MaxWidth : setWidth > currentMaxWidth ? currentMaxWidth : setWidth, currentRect.DestinationArea.Height),
-                            new Vector2(rowX + vectorOffset.X, currentRect.DestinationArea.Y + vectorOffset.Y)
+                            new Vector2(rowX - vectorOffset.X, currentRect.DestinationArea.Y - vectorOffset.Y)
                             ); ;
                     rects.Add(nextRect);
                     currentRect = nextRect;

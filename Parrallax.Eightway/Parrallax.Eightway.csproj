@@ -49,7 +49,6 @@
   <ItemGroup>
     <Compile Include="AppObjects\Keyboard4Way.cs" />
     <Compile Include="AppObjects\KeyboardRotation.cs" />
-    <Compile Include="BoundedBackground.cs" />
     <Compile Include="MapsHost.cs" />
     <Compile Include="ParrallaxHost.cs" />
     <Compile Include="Program.cs" />

@@ -55,7 +55,7 @@ namespace Parrallax.Eightway
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // Can rotate
-            this.fourway = new FourWayDirection (FourDirections.Stopped, 0.02f);
+            this.fourway = new FourWayDirection (FourDirections.Stopped, 0.5f);
             // Allows you to rotate.
             this._keyboard4Way = new Keyboard4Way(this.fourway, player1Keys);
 

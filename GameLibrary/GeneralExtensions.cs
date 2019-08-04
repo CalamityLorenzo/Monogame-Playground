@@ -77,6 +77,7 @@ namespace GameLibrary
 
         public static Vector2 GetMantissa(this Vector2 @this)
         {
+            // math dot floor rounds...THat may be a problem
             var oX = @this.X - (float)Math.Floor(@this.X);
             var oY = @this.Y - (float)Math.Floor(@this.Y);
             return new Vector2(oX, oY);

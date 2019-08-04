@@ -50,6 +50,7 @@
     <Compile Include="Animation\FramesInfo.cs" />
     <Compile Include="AppObjects\BackgroundRectanglesLayer.cs" />
     <Compile Include="AppObjects\BackgroundTilesLayer.cs" />
+    <Compile Include="AppObjects\BoundedBackground.cs" />
     <Compile Include="AppObjects\Dimensions.cs" />
     <Compile Include="AppObjects\FourWayDirection.cs" />
     <Compile Include="AppObjects\MapDimensions.cs" />

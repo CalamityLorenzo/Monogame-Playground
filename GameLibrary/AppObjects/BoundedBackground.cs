@@ -7,9 +7,13 @@ using GameLibrary.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Parrallax.Eightway
+namespace GameLibrary.AppObjects
 {
-    internal class BoundedBackground
+    /// <summary>
+    /// Draws a background of a certain size, 
+    /// but does not repeat it (hence bounde
+    /// </summary>
+    public class BoundedBackground
     {
         private readonly SpriteBatch spriteBatch;
         private Texture2D sprite;
@@ -22,6 +26,7 @@ namespace Parrallax.Eightway
         private List<DisplayRectInfo> _sourceRects;
         private Vector2 _previousPosition;
         private Viewport viewport;
+        private Dimensions mapDimensions;
 
         public BoundedBackground(SpriteBatch spriteBatch, Texture2D sprite, Rectangle[] atlasRects, List<int> map, Dimensions tileDimensions, Rectangle bounds, FourWayDirection fourway, Vector2 backgroundStartPos, Viewport viewPort)
         {
@@ -37,6 +42,8 @@ namespace Parrallax.Eightway
             this.viewport =  viewPort;
             this.viewport.Width += tileDimensions.Width;
             this.viewport.Height += tileDimensions.Height;
+            // expresses the column/Rows in block count (How many rows, with how many cols)
+            this.mapDimensions = new Dimensions(bounds.Width / tileDimensions.Width, bounds.Height / tileDimensions.Height);
         }
 
         public void Update(GameTime gameTime)
@@ -63,8 +70,6 @@ namespace Parrallax.Eightway
         private List<DisplayRectInfo> GetDisplayInfo(Vector2 backgroundTopLeft)
         {
             var displayRects = new List<DisplayRectInfo>();
-            var mapCols = bounds.Width / tileDimensions.Width;
-            var mapRows = bounds.Height / tileDimensions.Height;
 
             // From the current Position, calculate the map index.
             // This can be negative (if the map is off screen, or offset for whatever reason)
@@ -89,10 +94,10 @@ namespace Parrallax.Eightway
                         var mapIndexX = bgNormCols.X / tileDimensions.Width;
                         var mapIndexY = bgNormCols.Y / tileDimensions.Height;
 
-                        if (mapIndexX > (mapCols - 1) || mapIndexY > (mapRows - 1))
+                        if (mapIndexX > (this.mapDimensions.Width - 1) || mapIndexY > (mapDimensions.Height - 1))
                             break;
                         
-                        var currentMapIndex = ((mapIndexY * mapCols) + (mapIndexX));
+                        var currentMapIndex = ((mapIndexY * this.mapDimensions.Width ) + (mapIndexX));
 
                         if (currentMapIndex >= 0 && currentMapIndex < this.map.Count)
                         {

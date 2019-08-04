@@ -19,7 +19,7 @@ namespace Parrallax.Eightway
                              .LoadJsonFile("opts2.json")
                              .Build();
 
-            using (var game = new MapsHost(configData))
+            using (var game = new ParrallaxHost(configData))
                 game.Run();
         }
     }
