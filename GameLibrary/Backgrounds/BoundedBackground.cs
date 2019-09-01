@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using GameLibrary;
 using GameLibrary.AppObjects;
+using GameLibrary.Extensions;
 using GameLibrary.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace GameLibrary.AppObjects
+namespace GameLibrary.Drawing.Backgrounds
 {
     /// <summary>
     /// Draws a background of a certain size, 

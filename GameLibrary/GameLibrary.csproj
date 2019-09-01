@@ -45,18 +45,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Animation\Character.cs" />
     <Compile Include="Animation\FramesGenerator.cs" />
     <Compile Include="Animation\FramesInfo.cs" />
-    <Compile Include="AppObjects\BackgroundRectanglesLayer.cs" />
-    <Compile Include="AppObjects\BackgroundTilesLayer.cs" />
-    <Compile Include="AppObjects\BoundedBackground.cs" />
+    <Compile Include="Backgrounds\BackgroundRectanglesLayer.cs" />
+    <Compile Include="Backgrounds\BackgroundTilesLayer.cs" />
+    <Compile Include="Backgrounds\BoundedBackground.cs" />
     <Compile Include="AppObjects\Dimensions.cs" />
     <Compile Include="AppObjects\FourWayDirection.cs" />
     <Compile Include="AppObjects\MapDimensions.cs" />
     <Compile Include="AppObjects\Rotator.cs" />
     <Compile Include="Bresenham.cs" />
-    <Compile Include="GeneralExtensions.cs" />
+    <Compile Include="Extensions\GeneralExtensions.cs" />
+    <Compile Include="Extensions\Vector2Extensions.cs" />
     <Compile Include="Interfaces\GameDrawing.cs" />
     <Compile Include="Interfaces\GameUpdateable.cs" />
     <Compile Include="KeyboardFunctions.cs" />
@@ -64,8 +64,7 @@
     <Compile Include="Models\ScreenData.cs" />
     <Compile Include="PlayerThings\KeyboardManager.cs" />
     <Compile Include="PlayerThings\ControlMapping.cs" />
-    <Compile Include="Player\PlayerContainer.cs" />
-    <Compile Include="PointExtensions.cs" />
+    <Compile Include="Extensions\PointExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpriteBatchExtensions.cs" />
     <Compile Include="Texture2dExtensions.cs" />

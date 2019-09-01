@@ -3,11 +3,12 @@ using GameLibrary.Animation;
 using GameLibrary.AppObjects;
 using GameLibrary.Config.App;
 using GameLibrary.Extensions;
-using GameLibrary.Player;
 using GameLibrary.PlayerThings;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGamePlayground.Animation;
+using MonoGamePlayground.Player;
 using System;
 using System.Collections.Generic;
 
@@ -25,7 +26,7 @@ namespace MonoGameTests
         ConfigurationData configData;
         PlayerContainer player;
         Microsoft.Xna.Framework.Graphics.Texture2D baseJeep;
-        Dictionary<ControlMapping, Keys> player1Keys;
+        Dictionary<PlayerControls, Keys> player1Keys;
         public KeyboardState previousKeyState { get; private set; }
 
         public Game1()
@@ -42,7 +43,7 @@ namespace MonoGameTests
 
             var player1Dictionary = configData.ToResultType<Dictionary<string, string>>("Player1Controls");
             var player2Dictionary = configData.ToResultType<Dictionary<string, string>>("Player2Controls");
-            player1Keys = GeneralExtensions.ConvertToKeySet<ControlMapping>(player1Dictionary);
+            player1Keys = GeneralExtensions.ConvertToKeySet<PlayerControls>(player1Dictionary);
         }
 
 

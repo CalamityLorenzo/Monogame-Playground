@@ -14,23 +14,23 @@ namespace Parrallax.Eightway
     {
         private readonly FourWayDirection _fourwayDirection;
         private KeyboardManager _keyManager = new KeyboardManager();
-        private readonly Dictionary<ControlMapping, Keys> _keyMap;
+        private readonly Dictionary<PlayerControls, Keys> _keyMap;
 
-        public Keyboard4Way(FourWayDirection fourwayDirection, Dictionary<ControlMapping, Keys> keyMap)
+        public Keyboard4Way(FourWayDirection fourwayDirection, Dictionary<PlayerControls, Keys> keyMap)
         {
             this._fourwayDirection = fourwayDirection;
             this._keyMap = keyMap;
             CreateKeyboardMappings(_keyManager, _keyMap, _fourwayDirection);
         }
 
-        private void CreateKeyboardMappings(KeyboardManager keyManager, Dictionary<ControlMapping, Keys> keyMap, FourWayDirection fourwayDirection)
+        private void CreateKeyboardMappings(KeyboardManager keyManager, Dictionary<PlayerControls, Keys> keyMap, FourWayDirection fourwayDirection)
         {
             keyManager.AddMovingActions(new Dictionary<IEnumerable<Keys>, Action>
             {
-                { new []{ keyMap[ControlMapping.Up]}, ()=>fourwayDirection.SetDirection(FourDirections.Up) },
-                { new []{ keyMap[ControlMapping.Down]}, ()=>fourwayDirection.SetDirection(FourDirections.Down) },
-                { new []{ keyMap[ControlMapping.Left]}, ()=>fourwayDirection.SetDirection(FourDirections.Left) },
-                { new []{ keyMap[ControlMapping.Right]}, ()=>fourwayDirection.SetDirection(FourDirections.Right) },
+                { new []{ keyMap[PlayerControls.Up]}, ()=>fourwayDirection.SetDirection(FourDirections.Up) },
+                { new []{ keyMap[PlayerControls.Down]}, ()=>fourwayDirection.SetDirection(FourDirections.Down) },
+                { new []{ keyMap[PlayerControls.Left]}, ()=>fourwayDirection.SetDirection(FourDirections.Left) },
+                { new []{ keyMap[PlayerControls.Right]}, ()=>fourwayDirection.SetDirection(FourDirections.Right) },
             }, () => fourwayDirection.SetDirection(FourDirections.Stopped));
 
         }

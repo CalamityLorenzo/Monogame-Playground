@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameLibrary.AppObjects
 {
+    // LIke a point...BUt for width and heights
     public struct Dimensions
     {
         public Dimensions(int width, int height)

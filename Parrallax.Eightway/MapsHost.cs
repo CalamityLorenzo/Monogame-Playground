@@ -1,16 +1,17 @@
-﻿using GameLibrary;
+﻿using System;
+using GameLibrary;
 using GameLibrary.Animation;
 using GameLibrary.AppObjects;
 using GameLibrary.Config.App;
+using GameLibrary.Drawing.Backgrounds;
 using GameLibrary.Extensions;
 using GameLibrary.Models;
 using GameLibrary.PlayerThings;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Parrallax.Eightway
 {
@@ -45,7 +46,7 @@ namespace Parrallax.Eightway
         {
             var screenData = configData.ToResultType<ScreenData>("ScreenOptions");
             var player1Dictionary = configData.ToResultType<Dictionary<string, string>>("Player1Controls");
-            var player1Keys = GeneralExtensions.ConvertToKeySet<ControlMapping>(player1Dictionary);
+            var player1Keys = GeneralExtensions.ConvertToKeySet<PlayerControls>(player1Dictionary);
             // Configure the screen.
             graphics.PreferredBackBufferWidth = screenData.ScreenWidth;
             graphics.PreferredBackBufferHeight = screenData.ScreenHeight;

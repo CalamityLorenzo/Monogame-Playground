@@ -1,4 +1,5 @@
-﻿using GameLibrary.Interfaces;
+﻿using GameLibrary.Extensions;
+using GameLibrary.Interfaces;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -61,9 +62,9 @@ namespace GameLibrary.AppObjects
 
         }
 
-        private Vector2 GetVectorFromDirection(FourDirections directio)
+        private Vector2 GetVectorFromDirection(FourDirections direction)
         {
-            switch (directio)
+            switch (direction)
             {
                 case FourDirections.Up:
                     return GeneralExtensions.UnitAngleVector(0f);
@@ -75,6 +76,9 @@ namespace GameLibrary.AppObjects
                     return GeneralExtensions.UnitAngleVector(180f);
                 case FourDirections.Stopped:
                     return CurrentDirectionVector;
+                case FourDirections.Unknown:
+                    throw new ArgumentException("Where are you going?s");
+                    break;
                 default:
                     return GeneralExtensions.UnitAngleVector(123f);
             }

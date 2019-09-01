@@ -1,14 +1,17 @@
-﻿using GameLibrary.Animation;
+﻿using GameLibrary;
+using GameLibrary.Animation;
 using GameLibrary.AppObjects;
+using GameLibrary.Extensions;
 using GameLibrary.Interfaces;
 using GameLibrary.PlayerThings;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGamePlayground.Animation;
 using System;
 using System.Collections.Generic;
 
-namespace GameLibrary.Player
+namespace MonoGamePlayground.Player
 {
     // ALl the logics, and stuffs to make you empower the character to achieve their potential
     // or something.
@@ -19,7 +22,7 @@ namespace GameLibrary.Player
         public Character playerCharacter { get; }
         public Vector2 CurrentPosition => this._currentPosition;
 
-        private readonly Dictionary<ControlMapping, Keys> keyMap;
+        private readonly Dictionary<PlayerControls, Keys> keyMap;
         private GameLibrary.PlayerThings.KeyboardManager keyboardManager = new KeyboardManager();
         private GamePadState previousPadState;
         private float currentAngle; // Cheaper to compare/calculate this per update than the direction vector
@@ -28,7 +31,7 @@ namespace GameLibrary.Player
         private float _velocity = 0f;
         internal Rotator Rotatation { get; }
 
-        public PlayerContainer(SpriteBatch spriteBatch, Texture2D atlas, Character gameChar, Rotator rTater, Dictionary<ControlMapping, Keys> keyMap, Point startPosition)
+        public PlayerContainer(SpriteBatch spriteBatch, Texture2D atlas, Character gameChar, Rotator rTater, Dictionary<PlayerControls, Keys> keyMap, Point startPosition)
         {
             _spriteBatch = spriteBatch;
             Atlas = atlas;
@@ -39,21 +42,21 @@ namespace GameLibrary.Player
 
             ConfigureKeyManager(keyMap);
             this.currentAngle = rTater.DestinationAngle; // The vehicle turns but the movement does not.
-            directionNormal = GeneralExtensions.AngledVectorFromDegrees(rTater.DestinationAngle);
+            directionNormal = GeneralExtensions.UnitAngleVector(rTater.DestinationAngle);
         }
 
-        private void ConfigureKeyManager(Dictionary<ControlMapping, Keys> keyMap)
+        private void ConfigureKeyManager(Dictionary<PlayerControls, Keys> keyMap)
         {
             keyboardManager.AddMovingActions(new Dictionary<IEnumerable<Keys>, Action>
             {
-                { new[] { this.keyMap[ControlMapping.Up], this.keyMap[ControlMapping.Right] },()=> {this.Rotatation.SetDestinationAngle(45f); this.EnableVelocity(); } },
-                { new[] { this.keyMap[ControlMapping.Up], this.keyMap[ControlMapping.Left] },()=> {this.Rotatation.SetDestinationAngle(315f); this.EnableVelocity(); }},
-                { new[] { this.keyMap[ControlMapping.Down], this.keyMap[ControlMapping.Right] },()=> {this.Rotatation.SetDestinationAngle(135f); this.EnableVelocity(); }},
-                { new[] { this.keyMap[ControlMapping.Down], this.keyMap[ControlMapping.Left] },()=> {this.Rotatation.SetDestinationAngle(225f); this.EnableVelocity(); }},
-                { new[] { this.keyMap[ControlMapping.Left] },()=> {this.Rotatation.SetDestinationAngle(270f); this.EnableVelocity(); }},
-                { new[] { this.keyMap[ControlMapping.Right] },()=> {this.Rotatation.SetDestinationAngle(90f); this.EnableVelocity(); }},
-                { new[] { this.keyMap[ControlMapping.Up] },()=> {this.Rotatation.SetDestinationAngle(0f); this.EnableVelocity(); }},
-                { new[] { this.keyMap[ControlMapping.Down] },()=> {this.Rotatation.SetDestinationAngle(180f); this.EnableVelocity(); }},
+                { new[] { this.keyMap[PlayerControls.Up], this.keyMap[PlayerControls.Right] },()=> {this.Rotatation.SetDestinationAngle(45f); this.EnableVelocity(); } },
+                { new[] { this.keyMap[PlayerControls.Up], this.keyMap[PlayerControls.Left] },()=> {this.Rotatation.SetDestinationAngle(315f); this.EnableVelocity(); }},
+                { new[] { this.keyMap[PlayerControls.Down], this.keyMap[PlayerControls.Right] },()=> {this.Rotatation.SetDestinationAngle(135f); this.EnableVelocity(); }},
+                { new[] { this.keyMap[PlayerControls.Down], this.keyMap[PlayerControls.Left] },()=> {this.Rotatation.SetDestinationAngle(225f); this.EnableVelocity(); }},
+                { new[] { this.keyMap[PlayerControls.Left] },()=> {this.Rotatation.SetDestinationAngle(270f); this.EnableVelocity(); }},
+                { new[] { this.keyMap[PlayerControls.Right] },()=> {this.Rotatation.SetDestinationAngle(90f); this.EnableVelocity(); }},
+                { new[] { this.keyMap[PlayerControls.Up] },()=> {this.Rotatation.SetDestinationAngle(0f); this.EnableVelocity(); }},
+                { new[] { this.keyMap[PlayerControls.Down] },()=> {this.Rotatation.SetDestinationAngle(180f); this.EnableVelocity(); }},
             }, () => {this.Rotatation.StopRotation(); this.DisableVelocity(); });
 
         }

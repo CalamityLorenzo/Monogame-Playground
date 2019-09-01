@@ -6,8 +6,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
+using GameLibrary.Extensions;
 
-namespace GameLibrary.AppObjects
+namespace GameLibrary.Drawing.Backgrounds
 {
     // background layer that is drawn using rectangles
     // it is omni-directional and can be used with velocites.

@@ -4,11 +4,12 @@ using System.Diagnostics;
 using System.Linq;
 using GameLibrary;
 using GameLibrary.AppObjects;
+using GameLibrary.Extensions;
 using GameLibrary.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace GameLibrary.AppObjects
+namespace GameLibrary.Drawing.Backgrounds
 {
     public class BackgroundTilesLayer
     {
@@ -87,7 +88,7 @@ namespace GameLibrary.AppObjects
             var backgroundRowLength = frameDimensions.Width / tileDimensions.Width;
 
             var ViewPortStart = Vector2.Zero;
-            var viewPortPosition = ViewPortStart;
+            var viewPortPosition = ViewPortStart;   
             // Each step is the width/height of the tile inside viewing rectangle.
             // So if you have the fist position correct...Then it's an additive process.
             for (var y = 0; y < displayRowLength; y += 1)
