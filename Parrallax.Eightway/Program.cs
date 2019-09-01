@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameLibrary.Config.App;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,7 +14,12 @@ namespace Parrallax.Eightway
         [STAThread]
         static void Main()
         {
-            using (var game = new ParrallaxHost())
+            var configData = Configuration.Manager
+                             .LoadJsonFile("opts.json")
+                             .LoadJsonFile("opts2.json")
+                             .Build();
+
+            using (var game = new ParrallaxHost(configData))
                 game.Run();
         }
     }

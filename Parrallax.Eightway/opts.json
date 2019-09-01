@@ -1,7 +1,12 @@
 {
-  "Options": {
-    "ScreenWidth": 50,
-    "ScreenHeight": 50
+  "ScreenOptions": {
+    "ScreenWidth": 1024,
+    "ScreenHeight": 768,
+    "FullScreen": true 
+  },
+  "GameOptions": {
+    "Velocity": 0.5,
+    "StartVector": [100,100]
   },
   "Player1Controls": {
     "Up": "W",

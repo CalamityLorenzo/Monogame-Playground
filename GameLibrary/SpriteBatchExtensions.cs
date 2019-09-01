@@ -45,7 +45,7 @@ namespace GameLibrary.Extensions
         {
             var texture = SpriteBatchExtensions.GetOnePixelTexture(@this.GraphicsDevice);
 
-            var endVector = GeneralExtensions.AngledVectorFromDegrees(angleInDegrees, length);
+            var endVector = GeneralExtensions.UnitAngleVector(angleInDegrees, length);
             // negation of x was ngation of y not sure why it works.
             var endPoint = start + endVector;
             // create the list of points

@@ -9,7 +9,15 @@ namespace GameLibrary
 {
     public static class KeyboardFunctions
     {
-        public static IEnumerable<Keys> CurrentPressedKeys(IEnumerable<Keys> previousPressedKeys, KeyboardState currentState, KeyboardState previousState)
+        /// <summary>
+        /// puts the currently pressed keys into an array
+        /// Removes the dropped ones
+        /// </summary>
+        /// <param name="CurrentPressedKeys"></param>
+        /// <param name="currentState"></param>
+        /// <param name="previousState"></param>
+        /// <returns></returns>
+        public static IEnumerable<Keys> CurrentPressedKeys(IEnumerable<Keys> CurrentPressedKeys, KeyboardState currentState, KeyboardState previousState)
         {
             if (previousState == null)
                 return new List<Keys>();
@@ -18,7 +26,6 @@ namespace GameLibrary
             // add newly pressed keys
             foreach (var key in appKeys)
             {
-
                 if (!previousState.IsKeyDown(key))
                     pressedKeysState.Add(key);
             }
@@ -31,7 +38,7 @@ namespace GameLibrary
                 }
             }
             // remove newly lifted keys
-            pressedKeysState.RemoveWhere(k => oldKeys.Any(ok => ok == k));
+            pressedKeysState.RemoveWhere(prk => oldKeys.Any(ok => ok == prk));
             return pressedKeysState;
         }
     }

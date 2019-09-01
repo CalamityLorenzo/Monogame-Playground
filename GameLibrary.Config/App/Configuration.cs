@@ -36,7 +36,7 @@ namespace GameLibrary.Config.App
         private bool BuildComplete = false;
         public static Configuration Manager => configInstance.Value;
 
-        private List<string> fileNames = new List<string>();
+        private HashSet<string> fileNames = new HashSet<string>();
         private List<JObject> LoadedData = new List<JObject>();
 
         public Configuration LoadJsonFile(string jsonfilePath)

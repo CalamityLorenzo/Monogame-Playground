@@ -6,8 +6,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
+using GameLibrary.Extensions;
 
-namespace GameLibrary.AppObjects
+namespace GameLibrary.Drawing.Backgrounds
 {
     // background layer that is drawn using rectangles
     // it is omni-directional and can be used with velocites.
@@ -27,8 +28,6 @@ namespace GameLibrary.AppObjects
         private int totalWidth;
         private int totalHeight;
         private DisplayRectInfo[] _sourceArea;
-
-        public bool UseRectangleRender { get; private set; } = true;
 
         public BackgroundRectanglesLayer(SpriteBatch spriteBatch, Texture2D[] images, Rotator rotation, float velocity, Vector2 startOffset)
             : this(spriteBatch, images, rotation, velocity, startOffset, spriteBatch.GraphicsDevice.Viewport.Bounds)
@@ -54,11 +53,6 @@ namespace GameLibrary.AppObjects
             this.totalWidth = frameDimensions.Width * images.Length;
             this.totalHeight = frameDimensions.Height;
 
-        }
-
-        public void SwitchRenderer(bool useRects)
-        {
-            this.UseRectangleRender = useRects;
         }
 
         public void Update(GameTime gameTime)
@@ -106,7 +100,7 @@ namespace GameLibrary.AppObjects
             var sourceWidth = tSwidth >= MaxWidth ? MaxWidth : tSwidth;
             var sourceHeight = tsHeight >= MaxHeight ? MaxHeight : tsHeight;
 
-            var vectorOffset = new Vector2(currentPosition.X - (float)Math.Floor(currentPosition.X), currentPosition.Y - (float)Math.Floor(currentPosition.Y));
+            var vectorOffset = currentPosition.GetMantissa();//  new Vector2(currentPosition.X - (float)Math.Floor(currentPosition.X), currentPosition.Y - (float)Math.Floor(currentPosition.Y));
 
             var rootRectangle = new BaseRectInfo(new Rectangle(cameraBoundaries.X, cameraBoundaries.Y, sourceWidth, sourceHeight), vectorOffset);
             var currentRect = rootRectangle;
@@ -127,7 +121,7 @@ namespace GameLibrary.AppObjects
                     var currentMaxWidth = cameraBoundaries.Width - rowX;
                     var nextRect = new BaseRectInfo(
                             new Rectangle(rowX, currentRect.DestinationArea.Y, setWidth >= MaxWidth ? MaxWidth : setWidth > currentMaxWidth ? currentMaxWidth : setWidth, currentRect.DestinationArea.Height),
-                            new Vector2(rowX + vectorOffset.X, currentRect.DestinationArea.Y + vectorOffset.Y)
+                            new Vector2(rowX - vectorOffset.X, currentRect.DestinationArea.Y - vectorOffset.Y)
                             ); ;
                     rects.Add(nextRect);
                     currentRect = nextRect;
@@ -218,10 +212,8 @@ namespace GameLibrary.AppObjects
             for (var x = 0; x < _sourceArea.Length; ++x)
             {
                 var item = _sourceArea[x];
-                if (UseRectangleRender)
-                    spriteBatch.Draw(item.Texture, item.DestinationArea, item.SourceArea, Color.White);
-                else
-                    spriteBatch.Draw(item.Texture, item.DestinationStart, item.SourceArea, Color.White);
+
+                spriteBatch.Draw(item.Texture, item.DestinationStart, item.SourceArea, Color.White);
             }
         }
     }

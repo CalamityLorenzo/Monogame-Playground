@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameLibrary.Animation
+namespace MonoGamePlayground.Animation
 {
 
     public enum JeepState
